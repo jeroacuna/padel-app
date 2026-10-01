@@ -77,3 +77,14 @@ const TESTIMONIOS = [
   { texto: 'Reservé desde el celular en un minuto. Se juega de noche como de día.', nombre: 'Lucía F.', rol: 'Jugadora 7ma' },
   { texto: 'Las clases grupales me hicieron mejorar muchísimo. Gran ambiente.', nombre: 'Tomás B.', rol: 'Jugador 8va' }
 ];
+
+// Profesores (modo local). Con Supabase se leen de la tabla "profesores".
+// horarios: día de la semana (0=Dom ... 6=Sáb) -> horas de inicio. foto: ruta opcional, ej. 'assets/images/profe-1.jpg'
+const PROFESORES = [
+  { id: 1, nombre: 'Nicolás Bravo', especialidad: 'Iniciación y técnica base', precio: 16000, duracion: 60, foto: '',
+    bio: 'Para quienes arrancan o quieren ordenar su juego: golpes básicos, posición en la cancha y una buena base para disfrutar los partidos.',
+    horarios: { 1: [9, 10, 11, 17, 18, 19], 3: [9, 10, 11, 17, 18, 19], 5: [9, 10, 11, 16, 17], 6: [10, 11, 12] } },
+  { id: 2, nombre: 'Camila Ortega', especialidad: 'Táctica y competencia', precio: 18000, duracion: 60, foto: '',
+    bio: 'Entrenamiento para jugadores de 6ta y 7ma que compiten: bandeja, víbora, estrategia de pareja y manejo de los puntos importantes.',
+    horarios: { 2: [16, 17, 18, 19, 20], 4: [16, 17, 18, 19, 20], 6: [15, 16, 17], 0: [10, 11] } }
+];

@@ -43,7 +43,7 @@ function efectos() {
   addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', scrollY > 40);
     top.classList.toggle('show', scrollY > 700);
-    if (!reduce && scrollY < innerHeight) hero.style.transform = `translateY(${scrollY * 0.25}px) scale(1.1)`;
+    if (!reduce && scrollY < innerHeight) hero.style.setProperty('--sy', scrollY * 0.25 + 'px');
   }, { passive: true });
   top.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
   $('#burger').onclick = () => nav.classList.toggle('open');
