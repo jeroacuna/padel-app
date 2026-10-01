@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://TU-DOMINIO.com/sitemap.xml
