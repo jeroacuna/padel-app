@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Torneos y eventos | Padel Arena Paraná</title>
+<meta name="description" content="Torneos, americanos y clínicas de pádel en Paraná. Mirá fechas, premios y reglamento, e inscribite online en Padel Arena.">
+<meta name="theme-color" content="#07122e">
+<link rel="canonical" href="https://TU-DOMINIO.com/torneos.html">
+<link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg">
+<meta property="og:title" content="Torneos y eventos | Padel Arena">
+<meta property="og:description" content="Inscribite a los próximos torneos de pádel en Paraná.">
+<meta property="og:image" content="https://TU-DOMINIO.com/assets/images/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<header id="navbar" class="scrolled">
+  <a href="index.html" class="logo"><img src="assets/icons/logo.svg" alt="" width="34" height="34"><span data-cfg="nombre"></span></a>
+  <nav id="menu">
+    <a href="index.html#complejo">El complejo</a><a href="index.html#canchas">Canchas</a><a href="index.html#galeria">Galería</a>
+    <a href="index.html#servicios">Servicios</a><a href="torneos.html">Torneos</a><a href="index.html#contacto">Contacto</a>
+  </nav>
+  <a href="index.html#reservas" class="btn btn-lime">Reservar cancha</a>
+  <button id="burger" aria-label="Abrir menú"><span></span><span></span></button>
+</header>
+
+<main class="sec page-top"><div class="wrap" id="app"><p>Cargando torneos…</p></div></main>
+
+<footer><p class="copy" style="border:0;margin:0">© <span id="year"></span> <span data-cfg="nombre"></span>. Todos los derechos reservados.</p></footer>
+
+<div class="modal" id="modal"><div class="modal-card glass" id="modalCard"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/torneos-api.js"></script>
+<script src="js/torneos.js"></script>
+</body>
+</html>

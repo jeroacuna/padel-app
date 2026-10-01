@@ -20,8 +20,11 @@ function render() {
         <a href="#reservas" class="btn btn-lime magnetic">Reservar</a></div>
     </article>`).join('');
   $('#galleryGrid').innerHTML = IMAGES.galeria.map((u, i) => `<button class="g-item g${i % 6} reveal" data-img="${u}" style="${bg(u)}" aria-label="Ver foto ${i + 1}"></button>`).join('');
-  $('#eventosGrid').innerHTML = EVENTOS.map(e => `
-    <article class="event reveal ${e.destacado ? 'big' : ''}"><small>${e.fecha}</small><h3>${e.titulo}</h3><p>${e.info}</p><a href="#reservas" class="btn ${e.destacado ? 'btn-lime' : 'btn-ghost'}">Ver evento</a></article>`).join('');
+  TorneosAPI.listar().then(ts => {
+    $('#eventosGrid').innerHTML = ts.slice(0, 3).map((e, i) => `
+      <article class="event reveal in ${i ? '' : 'big'}"><small>${fechaCorta(e.fecha)}</small><h3>${e.titulo}</h3><p>${e.categorias.join(' / ')}</p>
+      <a href="torneos.html?id=${e.id}" class="btn ${i ? 'btn-ghost' : 'btn-lime'}">Ver evento</a></article>`).join('');
+  }).catch(() => {});
   $('#infoList').innerHTML = [['map-pin', CONFIG.direccion], ['clock', CONFIG.horarios], ['phone', CONFIG.telefono], ['message-circle', 'WhatsApp: ' + CONFIG.telefono]]
     .map(([i, t]) => `<li><i data-lucide="${i}"></i>${t}</li>`).join('');
   const q = encodeURIComponent(CONFIG.direccion || CONFIG.mapsQuery);

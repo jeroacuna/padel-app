@@ -11,7 +11,9 @@ const CONFIG = {
   horaInicio: 9,      // primer turno
   horaFin: 22,        // último turno (empieza a las 22:00)
   duracion: '60 min',
-  moneda: '$'
+  moneda: '$',
+  pagoAlias: 'padelarena.pago', // alias para transferencias (ficticio)
+  pagoTitular: 'Padel Arena (demo)'
 };
 
 // Imágenes: poné tus fotos en assets/images y cambiá la ruta. Si el archivo no existe, se ve un degradé.
@@ -19,7 +21,7 @@ const IMAGES = {
   hero: 'assets/images/hero.jpg',
   galeria: [
     'assets/images/galeria-1.jpg', 'assets/images/galeria-2.jpg', 'assets/images/galeria-3.jpg',
-    'assets/images/galeria-4.jpg', 'assets/images/galeria-5.jpg', 'assets/images/galeria-6.jpg'
+    'assets/images/galeria-4.jpg', 'assets/images/hero.jpg', 'assets/images/galeria-6.jpg'
   ]
 };
 
@@ -52,10 +54,22 @@ const SERVICIOS = [
   ['door-open', 'Vestuarios', 'Abiertos durante todo el horario.']
 ];
 
-const EVENTOS = [
-  { fecha: 'Sáb 18 oct', titulo: 'Torneo Amateur', info: 'Categorías 6ta / 7ma / 8va', destacado: true },
-  { fecha: 'Dom 26 oct', titulo: 'Americano Mixto', info: 'Parejas sorteadas, abierto a todos' },
-  { fecha: 'Sáb 8 nov', titulo: 'Clínica con profesores', info: 'Técnica de volea y bandeja' }
+const TORNEOS = [
+  { id: 1, titulo: 'Torneo Amateur', fecha: '2026-10-24', hora: '09:00', categorias: ['6ta', '7ma', '8va'], precio: 24000, cupos: 16, inscriptos: 9,
+    lugar: 'Padel Arena · Canchas 1 a 4', formato: 'Fase de grupos y eliminación directa. Cada pareja juega mínimo 3 partidos.',
+    descripcion: 'El torneo amateur del año. Una jornada completa de pádel con tres categorías, árbitros y tercer tiempo en el bar.',
+    premios: ['Trofeo + kit de paletas', 'Trofeo + vouchers de clases', 'Medallas + 2 tubos de pelotas'],
+    reglamento: ['Parejas fijas, sin cambios después de inscribirse', 'Partidos al mejor de 3 sets, con punto de oro', 'Tolerancia de 10 minutos, después W.O.', 'Inscripción confirmada al acreditar el pago'] },
+  { id: 2, titulo: 'Americano Mixto', fecha: '2026-11-01', hora: '16:00', categorias: ['Mixto libre'], precio: 12000, cupos: 24, inscriptos: 11,
+    lugar: 'Padel Arena · Canchas 1 y 2', formato: 'Parejas rotativas: jugás con distintos compañeros y sumás puntos individuales.',
+    descripcion: 'Ideal para conocer gente nueva y jugar sin presión. Abierto a todos los niveles.',
+    premios: ['Premio sorpresa del bar', 'Voucher de alquiler de paletas', 'Tubo de pelotas'],
+    reglamento: ['Sorteo de parejas en cada ronda', 'Rondas de 20 minutos', 'Gana quien más puntos acumule'] },
+  { id: 3, titulo: 'Clínica con profesores', fecha: '2026-11-14', hora: '10:00', categorias: ['Todos los niveles'], precio: 15000, cupos: 12, inscriptos: 4,
+    lugar: 'Padel Arena · Cancha 3 (indoor)', formato: 'Clase intensiva de 3 horas, grupos reducidos y video análisis.',
+    descripcion: 'Trabajá volea, bandeja y salida de pared con profesores del complejo.',
+    premios: ['Certificado de participación', 'Descuento en clases grupales', 'Sorteo de una paleta'],
+    reglamento: ['Traé tu paleta o alquilá en el mostrador', 'Cupos limitados por orden de inscripción'] }
 ];
 
 const TESTIMONIOS = [

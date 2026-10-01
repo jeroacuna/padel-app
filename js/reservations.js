@@ -4,15 +4,26 @@
 const ReservasAPI = {
   KEY: 'padelarena_reservas',
   _all() { try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; } },
-  async porFecha(fecha) { return this._all().filter(r => r.fecha === fecha); },
+  async porFecha(fecha) {
+    if (!db) return this._all().filter(r => r.fecha === fecha);
+    const { data, error } = await db.rpc('ocupados', { p_fecha: fecha });
+    if (error) throw error;
+    return data.map(r => ({ hora: r.hora, canchaId: r.cancha_id }));
+  },
   async crear(r) {
-    const all = this._all();
-    if (all.some(x => x.fecha === r.fecha && x.hora === r.hora && x.canchaId === r.canchaId))
-      throw new Error('Ese turno ya fue reservado. Elegí otro.');
-    const nueva = { ...r, id: Date.now().toString(36).toUpperCase() };
-    all.push(nueva);
-    localStorage.setItem(this.KEY, JSON.stringify(all));
-    return nueva;
+    if (!db) { // modo local
+      const all = this._all();
+      if (all.some(x => x.fecha === r.fecha && x.hora === r.hora && x.canchaId === r.canchaId))
+        throw new Error('Ese turno ya fue reservado. Elegí otro.');
+      const nueva = { ...r, id: Date.now().toString(36).toUpperCase() };
+      all.push(nueva); localStorage.setItem(this.KEY, JSON.stringify(all));
+      return nueva;
+    }
+    const { data, error } = await db.rpc('crear_reserva', {
+      p_fecha: r.fecha, p_hora: r.hora, p_cancha: r.canchaId, p_nombre: r.nombre,
+      p_apellido: r.apellido, p_telefono: r.telefono, p_email: r.email, p_precio: r.precio });
+    if (error) throw new Error(error.message);
+    return { ...r, id: data };
   }
 };
 
@@ -32,7 +43,7 @@ const Reserva = {
   hh: h => `${String(h).padStart(2, '0')}:00`,
   ocupada(c, h) {
     const e = this.estado;
-    return ocupadoSim(e.fecha, c.id, h) || e.guardadas.some(r => r.hora === h && r.canchaId === c.id);
+    return (!db && ocupadoSim(e.fecha, c.id, h)) || e.guardadas.some(r => r.hora === h && r.canchaId === c.id);
   },
   pasada(h) {
     const hoy = new Date();
@@ -62,7 +73,8 @@ const Reserva = {
   async elegirFecha(fecha) {
     const e = this.estado;
     e.fecha = fecha; e.hora = null; e.cancha = null;
-    e.guardadas = await ReservasAPI.porFecha(fecha);
+    try { e.guardadas = await ReservasAPI.porFecha(fecha); }
+    catch (err) { alert('No se pudo cargar la disponibilidad. Intentá de nuevo.'); return; }
     this.calendario(); this.horarios(); this.desbloquear('stepHora');
     this.bloquear('stepCancha', 'stepResumen'); this.resumen(); this.marcarPaso(1);
   },
