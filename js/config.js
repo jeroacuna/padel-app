@@ -1,13 +1,13 @@
 /* ===== TODO LO EDITABLE VIVE ACÁ ===== */
 const CONFIG = {
   nombre: 'PADEL ARENA',
-  telefono: '+54 9 343 000-0000',
-  whatsapp: '5493430000000',
+  telefono: '+54 9 343 695-8831',
+  whatsapp: '5493436958831',
   email: 'info@padelarena.com',
-  direccion: 'Av. Ejemplo 1234, Paraná, Entre Ríos',
-  mapsQuery: 'Paraná, Entre Ríos',
+  direccion: 'Smash Padel, Paraná, Entre Ríos',
+  mapsQuery: 'Smash Padel, Paraná, Entre Ríos',
   horarios: 'Todos los días de 09:00 a 23:00',
-  instagram: 'https://instagram.com/',
+  instagram: 'https://instagram.com/jerooo._',
   horaInicio: 9,      // primer turno
   horaFin: 22,        // último turno (empieza a las 22:00)
   duracion: '60 min',

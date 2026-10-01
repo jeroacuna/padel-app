@@ -85,8 +85,10 @@ function interacciones() {
   setInterval(() => ir(i + 1), 6000);
 
   $('#formContacto').addEventListener('submit', e => {
-    e.preventDefault(); const b = e.target.querySelector('button'); b.textContent = 'Enviando…'; b.disabled = true;
-    setTimeout(() => { b.textContent = '¡Consulta enviada!'; e.target.reset(); setTimeout(() => { b.textContent = 'Enviar consulta'; b.disabled = false; }, 2500); }, 900);
+    e.preventDefault();
+    const f = e.target, txt = `Hola! Soy ${f.nombre.value} (${f.email.value}).\n${f.mensaje.value}`;
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt)}`, '_blank', 'noopener');
+    f.reset();
   });
 }
 
