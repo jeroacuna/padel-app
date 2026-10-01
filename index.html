@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PADEL ARENA · Reservá tu cancha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div id="loader"><div class="loader-logo">PADEL <span>ARENA</span></div><div class="loader-ball"></div></div>
+<div class="cursor" id="cursor"></div>
+
+<header id="navbar">
+  <a href="#inicio" class="logo"><i data-lucide="circle-dot"></i><span data-cfg="nombre"></span></a>
+  <nav id="menu">
+    <a href="#complejo">El complejo</a><a href="#canchas">Canchas</a><a href="#galeria">Galería</a>
+    <a href="#servicios">Servicios</a><a href="#reservas">Reservas</a><a href="#contacto">Contacto</a>
+  </nav>
+  <a href="#reservas" class="btn btn-lime magnetic">Reservar cancha</a>
+  <button id="burger" aria-label="Abrir menú"><span></span><span></span></button>
+</header>
+
+<section id="inicio" class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="court-lines"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <p class="hero-tag"><span class="pulse"></span> 4 canchas abiertas hoy</p>
+    <h1>Tu próximo partido<br>empieza acá.</h1>
+    <p class="hero-sub">Canchas panorámicas e indoor en Paraná. Elegí día y horario, y listo.</p>
+    <div class="hero-btns">
+      <a href="#reservas" class="btn btn-lime magnetic">Reservar cancha</a>
+      <a href="#complejo" class="btn btn-ghost magnetic">Conocer el complejo</a>
+    </div>
+  </div>
+  <div class="scroll-ind"><span></span></div>
+</section>
+
+<section id="complejo" class="sec">
+  <div class="wrap">
+    <h2 class="reveal">Mucho más que una cancha.</h2>
+    <div class="stats reveal">
+      <div><b data-count="4">0</b><small>canchas</small></div>
+      <div><b data-count="14">0</b><small>turnos por día</small></div>
+      <div><b data-count="1200">0</b><small>jugadores</small></div>
+    </div>
+    <div class="grid g4" id="amenidades"></div>
+  </div>
+</section>
+
+<section id="canchas" class="sec dark">
+  <div class="wrap">
+    <h2 class="reveal">Nuestras canchas</h2>
+    <div class="grid g4" id="canchasGrid"></div>
+  </div>
+</section>
+
+<section id="galeria" class="sec">
+  <div class="wrap">
+    <h2 class="reveal">Galería</h2>
+    <div class="gallery" id="galleryGrid"></div>
+  </div>
+</section>
+
+<section id="servicios" class="sec dark">
+  <div class="wrap">
+    <h2 class="reveal">Servicios</h2>
+    <div class="grid g4" id="serviciosGrid"></div>
+  </div>
+</section>
+
+<section id="eventos" class="sec">
+  <div class="wrap">
+    <h2 class="reveal">Torneos y eventos</h2>
+    <div class="events" id="eventosGrid"></div>
+  </div>
+</section>
+
+<section id="reservas" class="sec dark">
+  <div class="wrap">
+    <h2 class="reveal">Reservá tu cancha</h2>
+    <div class="booking">
+      <div class="steps" id="stepsBar"><span>Fecha</span><span>Horario</span><span>Cancha</span><span>Resumen</span><span>Tus datos</span></div>
+      <div class="bk-grid">
+        <div class="bk-col">
+          <h3>1. Elegí la fecha</h3>
+          <div class="cal glass" id="cal"></div>
+          <div id="stepHora" class="locked">
+            <h3>2. Elegí el horario</h3>
+            <div class="legend"><i class="l-ok"></i>Disponible <i class="l-res"></i>Reservado <i class="l-no"></i>No disponible</div>
+            <div class="slots" id="slots"></div>
+          </div>
+        </div>
+        <div class="bk-col">
+          <div id="stepCancha" class="locked">
+            <h3>3. Elegí la cancha</h3>
+            <div class="court-pick" id="courtPick"></div>
+          </div>
+          <div id="stepResumen" class="locked glass summary">
+            <h3>4. Resumen</h3>
+            <dl id="resumen"></dl>
+            <button class="btn btn-lime" id="btnConfirmar" disabled>Confirmar reserva</button>
+            <form id="formReserva" hidden>
+              <h3>5. Tus datos</h3>
+              <input name="nombre" placeholder="Nombre" required autocomplete="given-name">
+              <input name="apellido" placeholder="Apellido" required autocomplete="family-name">
+              <input name="telefono" type="tel" placeholder="Teléfono" required autocomplete="tel">
+              <input name="email" type="email" placeholder="Email" required autocomplete="email">
+              <button class="btn btn-lime" type="submit">Reservar ahora</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonios" class="sec">
+  <div class="wrap">
+    <h2 class="reveal">Lo que dicen los jugadores</h2>
+    <div class="slider glass" id="slider"></div>
+    <div class="dots" id="sliderDots"></div>
+  </div>
+</section>
+
+<section id="contacto" class="sec dark">
+  <div class="wrap two">
+    <div>
+      <h2 class="reveal">Dónde estamos</h2>
+      <ul class="info" id="infoList"></ul>
+      <div class="hero-btns">
+        <a class="btn btn-ghost" id="btnMaps" target="_blank" rel="noopener">Abrir en Google Maps</a>
+        <a class="btn btn-lime" id="btnWsp" target="_blank" rel="noopener">Contactar por WhatsApp</a>
+      </div>
+      <iframe id="mapa" title="Mapa" loading="lazy"></iframe>
+    </div>
+    <form id="formContacto" class="glass contact">
+      <h3>Escribinos</h3>
+      <input name="nombre" placeholder="Nombre" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <textarea name="mensaje" rows="5" placeholder="Mensaje" required></textarea>
+      <button class="btn btn-lime" type="submit">Enviar consulta</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div><div class="logo"><i data-lucide="circle-dot"></i><span data-cfg="nombre"></span></div>
+      <p>El complejo de pádel de Paraná. Jugá, entrená y compartí.</p></div>
+    <div><b>Links</b><a href="#canchas">Canchas</a><a href="#reservas">Reservas</a><a href="#servicios">Servicios</a></div>
+    <div><b>Contacto</b><a id="fWsp" target="_blank" rel="noopener">WhatsApp</a><a id="fIg" target="_blank" rel="noopener">Instagram</a><span data-cfg="direccion"></span><span data-cfg="horarios"></span></div>
+  </div>
+  <p class="copy">© <span id="year"></span> <span data-cfg="nombre"></span>. Todos los derechos reservados.</p>
+</footer>
+
+<button id="toTop" aria-label="Volver arriba"><i data-lucide="arrow-up"></i></button>
+<div class="lightbox" id="lightbox"><button aria-label="Cerrar">×</button><div class="lb-img"></div></div>
+<div class="modal" id="modal"><div class="modal-card glass" id="modalCard"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/reservations.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
