@@ -5,16 +5,15 @@ const app = $('#app');
 const f2 = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const hh = h => `${String(h).padStart(2, '0')}:00`;
 const horasDe = (p, dow) => [...(p.horarios[dow] || [])].sort((a, b) => a - b);
-const avatar = p => p.foto
-  ? `<div class="avatar" style="background-image:url('${p.foto}')" role="img" aria-label="${p.nombre}"></div>`
-  : `<div class="avatar" aria-hidden="true">${p.nombre.split(' ').map(x => x[0]).slice(0, 2).join('')}</div>`;
+const avatar = profeAvatar;
 
 function lista(ps) {
   document.title = 'Profesores de pádel | Padel Arena Paraná';
-  app.innerHTML = `<h2>Nuestros profesores</h2><div class="t-list">${ps.map(p => `
-    <article class="prof-card glass">${avatar(p)}<small>${p.especialidad}</small><h3>${p.nombre}</h3>
-      <p>${p.bio}</p><p><b>${money(p.precio)}</b> la clase de ${p.duracion} min</p>
-      <a class="btn btn-lime" href="profesores.html?id=${p.id}">Ver horarios y reservar</a></article>`).join('')}</div>`;
+  app.innerHTML = `<div class="page-hero" style="background-image:linear-gradient(90deg,rgba(7,18,46,.92),rgba(7,18,46,.35)),url('assets/images/cancha-4.jpg'),linear-gradient(135deg,#0b1f4d,#2563ff)">
+      <div><small>CLASES DE PÁDEL</small><h2>Aprendé y mejorá tu juego</h2><p>Profesores del complejo, clases de una hora y reserva online en pocos pasos.</p></div></div>
+    <div class="t-list">${ps.map(profeCardHTML).join('')}</div>
+    <h3 style="margin-top:3rem">Cómo funciona</h3>
+    <div class="steps3"><div><b>1</b>Elegí a tu profe según tu nivel y objetivo.</div><div><b>2</b>Elegí el día y el horario libre que más te convenga.</div><div><b>3</b>Dejá tus datos y listo: tu clase queda reservada.</div></div>`;
 }
 
 function detalle(p) {

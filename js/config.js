@@ -88,3 +88,19 @@ const PROFESORES = [
     bio: 'Entrenamiento para jugadores de 6ta y 7ma que compiten: bandeja, víbora, estrategia de pareja y manejo de los puntos importantes.',
     horarios: { 2: [16, 17, 18, 19, 20], 4: [16, 17, 18, 19, 20], 6: [15, 16, 17], 0: [10, 11] } }
 ];
+
+// Portadas de torneos (cambialas por tus fotos)
+TORNEOS[0].imagen = 'assets/images/galeria-1.jpg';
+TORNEOS[1].imagen = 'assets/images/galeria-3.jpg';
+TORNEOS[2].imagen = 'assets/images/galeria-6.jpg';
+PROFESORES[0].etiquetas = ['Principiantes', 'Técnica', 'Niños'];
+PROFESORES[1].etiquetas = ['Competencia', 'Táctica', '6ta y 7ma'];
+
+// Avisos y novedades (modo local). tipo: 'urgente' (barra arriba de todo), 'info' o 'torneo' (tarjetas).
+// Poné activo: true en el de lluvia para ver la barra.
+const AVISOS = [
+  { tipo: 'urgente', titulo: 'Hoy cerramos por lluvia', texto: 'Las canchas descubiertas no están disponibles. Las indoor siguen abiertas.', enlace: '', activo: false, fecha: '2026-10-09' },
+  { tipo: 'info', titulo: 'Martes 13: ¡nuevo torneo!', texto: 'Estén atentos: el martes 13 anunciamos un torneo nuevo con premios y cupos limitados.', enlace: 'torneos.html', activo: true, fecha: '2026-10-09' },
+  { tipo: 'torneo', titulo: 'Abrió la inscripción al Torneo Amateur', texto: 'Categorías 6ta, 7ma y 8va. Quedan pocos cupos.', enlace: 'torneos.html?id=1', activo: true, fecha: '2026-10-08' },
+  { tipo: 'info', titulo: 'Clases con profes nuevos', texto: 'Nicolás y Camila ya tienen horarios disponibles para esta semana.', enlace: 'profesores.html', activo: true, fecha: '2026-10-07' }
+];

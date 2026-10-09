@@ -4,23 +4,30 @@ const app = $('#app');
 
 function lista(ts) {
   document.title = 'Torneos y eventos | Padel Arena Paraná';
-  app.innerHTML = `<h2>Torneos y eventos</h2><div class="t-list">${ts.map(t => {
+  const [dest, ...resto] = ts;
+  const card = t => {
     const libres = t.cupos - t.inscriptos;
-    return `<article class="t-card glass"><small>${fechaCorta(t.fecha)} · ${t.hora} hs</small><h3>${t.titulo}</h3>
-      <p>${t.categorias.join(' / ')}</p>
-      <p><b>${money(t.precio)}</b> por pareja</p>
+    return `<article class="t-card has-cover glass"><div class="t-cover" style="${portada(t)}">${badge(t.fecha)}${libres <= 0 ? '<em class="tag off">Completo</em>' : libres <= 3 ? '<em class="tag">¡Últimos cupos!</em>' : ''}</div>
+      <div class="t-body"><h3>${t.titulo}</h3><p>${t.categorias.join(' / ')} · ${t.hora} hs</p><p><b>${money(t.precio)}</b> por pareja</p>
       <div class="bar"><i style="width:${Math.min(100, t.inscriptos / t.cupos * 100)}%"></i></div>
       <p>${libres > 0 ? `Quedan ${libres} de ${t.cupos} cupos` : 'Cupos completos'}</p>
-      <a class="btn btn-lime" href="torneos.html?id=${t.id}">Ver detalle e inscribirme</a></article>`;
-  }).join('')}</div>`;
+      <a class="btn btn-lime" href="torneos.html?id=${t.id}">Ver detalle e inscribirme</a></div></article>`;
+  };
+  app.innerHTML = `<h2>Torneos y eventos</h2>
+    ${dest ? `<div class="featured" style="${portada(dest)}">${badge(dest.fecha)}<small>PRÓXIMO TORNEO</small><h3>${dest.titulo}</h3><p>${dest.categorias.join(' / ')} · ${dest.lugar}</p>
+      <div class="countdown" data-fecha="${dest.fecha}" data-hora="${dest.hora}"></div>
+      <a class="btn btn-lime" href="torneos.html?id=${dest.id}">Inscribirme · ${money(dest.precio)}</a></div>` : ''}
+    <div class="t-list">${resto.map(card).join('')}</div>`;
+  iniciarCuentas();
 }
 
 function detalle(t) {
   document.title = `${t.titulo} | Padel Arena Paraná`;
   const libres = t.cupos - t.inscriptos, lleno = libres <= 0, pos = ['1°', '2°', '3°'];
   app.innerHTML = `<a class="back" href="torneos.html">← Todos los torneos</a>
+  <div class="t-banner" style="${portada(t)}">${badge(t.fecha)}<h2>${t.titulo}</h2><div class="countdown" data-fecha="${t.fecha}" data-hora="${t.hora}"></div></div>
   <div class="t-detail"><div>
-    <h2>${t.titulo}</h2><p>${t.descripcion || ''}</p>
+    <p>${t.descripcion || ''}</p>
     <div class="facts">
       <div><small>Fecha</small><b>${fechaLarga(t.fecha)}</b></div><div><small>Hora</small><b>${t.hora} hs</b></div>
       <div><small>Lugar</small><b>${t.lugar}</b></div><div><small>Categorías</small><b>${t.categorias.join(' / ')}</b></div>
@@ -39,6 +46,7 @@ function detalle(t) {
     <input name="email" type="email" placeholder="Email" required>
     <button class="btn btn-lime" type="submit" ${lleno ? 'disabled' : ''}>${lleno ? 'Cupos completos' : `Inscribirme · ${money(t.precio)}`}</button>
   </form></div>`;
+  iniciarCuentas();
   $('#formInsc').addEventListener('submit', async e => {
     e.preventDefault();
     const f = e.target, btn = f.querySelector('button'); btn.disabled = true; btn.textContent = 'Inscribiendo…';

@@ -81,8 +81,9 @@ const Reserva = {
 
   horarios() {
     this.$('slots').innerHTML = this.horas().map(h => {
-      const libres = CANCHAS.filter(c => !this.ocupada(c, h)).length;
-      let cls = 'ok', txt = `${libres} libres`, dis = '';
+      const pre = this.estado.pre, lista = pre ? CANCHAS.filter(c => c.id === pre) : CANCHAS;
+      const libres = lista.filter(c => !this.ocupada(c, h)).length;
+      let cls = 'ok', txt = pre ? 'Libre' : `${libres} libres`, dis = '';
       if (this.pasada(h)) { cls = 'no'; txt = 'No disponible'; dis = 'disabled'; }
       else if (!libres) { cls = 'res'; txt = 'Reservado'; dis = 'disabled'; }
       return `<button class="slot ${cls} ${h === this.estado.hora ? 'sel' : ''}" data-hora="${h}" ${dis}><b>${this.hh(h)}</b><small>${txt}</small></button>`;
@@ -93,6 +94,7 @@ const Reserva = {
     this.estado.hora = h; this.estado.cancha = null;
     this.horarios(); this.canchas(); this.desbloquear('stepCancha');
     this.bloquear('stepResumen'); this.resumen(); this.marcarPaso(2);
+    if (this.estado.pre) this.elegirCancha(this.estado.pre); // vino desde una cancha: ya está elegida
   },
 
   canchas() {
@@ -152,7 +154,18 @@ const Reserva = {
     this.$('btnConfirmar').onclick = () => { this.$('formReserva').hidden = false; this.$('btnConfirmar').hidden = true; this.$('formReserva').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
     this.$('formReserva').addEventListener('submit', ev => { ev.preventDefault(); this.enviar(ev.target); });
     this.$('modal').addEventListener('click', ev => { if (ev.target.id === 'modal') ev.target.classList.remove('open'); });
+    document.addEventListener('click', ev => {
+      const b = ev.target.closest('[data-reservar-cancha]');
+      if (b) this.fijarCancha(+b.dataset.reservarCancha);
+      if (ev.target.id === 'quitarPre') this.fijarCancha(null);
+    });
   },
-  /* Los botones "Reservar" de las canchas llaman a esto */
-  preseleccionarCancha(id) { this.estado.preCancha = id; }
+  /* Botón "Reservar" de cada cancha: deja esa cancha elegida de antemano */
+  fijarCancha(id) {
+    const e = this.estado, c = id && CANCHAS.find(x => x.id === id), b = this.$('preBanner');
+    e.pre = c ? c.id : null; e.cancha = null; e.hora = null;
+    b.hidden = !c;
+    if (c) b.innerHTML = `<span>Reservando <b>${c.nombre} · ${c.tipo}</b></span><button type="button" id="quitarPre">Cambiar cancha</button>`;
+    if (e.fecha) { this.horarios(); this.bloquear('stepCancha', 'stepResumen'); this.resumen(); this.marcarPaso(1); }
+  }
 };

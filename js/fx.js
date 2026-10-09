@@ -1,7 +1,7 @@
 /* Animaciones extra. Se desactivan solas si el usuario pidió "reducir movimiento" y en pantallas táctiles. */
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const fine = !matchMedia('(pointer: coarse)').matches; // todo lo que no sea pantalla táctil
 
   // 1) Título del hero, palabra por palabra
   const h1 = document.querySelector('.hero h1');

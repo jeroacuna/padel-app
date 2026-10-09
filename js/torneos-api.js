@@ -26,3 +26,17 @@ const TorneosAPI = {
     return data;
   }
 };
+
+/* Ayudas visuales compartidas */
+const MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+const badge = f => { const d = new Date(f + 'T00:00'); return `<div class="date-badge"><b>${d.getDate()}</b><span>${MESES[d.getMonth()]}</span></div>`; };
+const portada = t => `background-image:linear-gradient(180deg,rgba(7,18,46,.15),rgba(7,18,46,.88)),${t.imagen ? `url('${t.imagen}'),` : ''}linear-gradient(135deg,#0b1f4d,#2563ff 60%,#16a34a)`;
+function iniciarCuentas() { // contador regresivo para todos los .countdown de la página
+  const pintar = () => document.querySelectorAll('.countdown').forEach(el => {
+    const ms = new Date(`${el.dataset.fecha}T${el.dataset.hora || '00:00'}`) - new Date();
+    if (ms <= 0) { el.textContent = '¡Ya empezó!'; return; }
+    const v = [[Math.floor(ms / 864e5), 'días'], [Math.floor(ms % 864e5 / 36e5), 'hs'], [Math.floor(ms % 36e5 / 6e4), 'min'], [Math.floor(ms % 6e4 / 1e3), 'seg']];
+    el.innerHTML = v.map(([n, l]) => `<span><b>${String(n).padStart(2, '0')}</b>${l}</span>`).join('');
+  });
+  pintar(); clearInterval(window._cuenta); window._cuenta = setInterval(pintar, 1000);
+}

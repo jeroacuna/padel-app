@@ -17,16 +17,27 @@ function render() {
       <div class="court-body"><h3>${c.nombre}</h3><span class="chip">${c.tipo}</span>
         <ul>${c.tags.map(t => `<li>${t}</li>`).join('')}</ul>
         <p class="price">Desde ${CONFIG.moneda}${c.precio.toLocaleString('es-AR')} <small>/ turno</small></p>
-        <a href="#reservas" class="btn btn-lime magnetic">Reservar</a></div>
+        <a href="#reservas" data-reservar-cancha="${c.id}" class="btn btn-lime magnetic">Reservar</a></div>
     </article>`).join('');
   $('#galleryGrid').innerHTML = IMAGES.galeria.map((u, i) => `<button class="g-item g${i % 6} reveal" data-img="${u}" style="${bg(u)}" aria-label="Ver foto ${i + 1}"></button>`).join('');
   TorneosAPI.listar().then(ts => {
     $('#eventosGrid').innerHTML = ts.slice(0, 3).map((e, i) => `
-      <article class="event reveal in ${i ? '' : 'big'}"><small>${fechaCorta(e.fecha)}</small><h3>${e.titulo}</h3><p>${e.categorias.join(' / ')}</p>
-      <a href="torneos.html?id=${e.id}" class="btn ${i ? 'btn-ghost' : 'btn-lime'}">Ver evento</a></article>`).join('');
+      <article class="event reveal in ${i ? '' : 'big'}" ${i ? '' : `style="${portada(e)}"`}>
+        ${i ? '' : badge(e.fecha)}<small>${fechaCorta(e.fecha)} · ${e.hora} hs</small><h3>${e.titulo}</h3><p>${e.categorias.join(' / ')}</p>
+        ${i ? '' : `<div class="countdown" data-fecha="${e.fecha}" data-hora="${e.hora}"></div>`}
+        <a href="torneos.html?id=${e.id}" class="btn ${i ? 'btn-ghost' : 'btn-lime'}">Ver evento</a></article>`).join('');
+    iniciarCuentas();
   }).catch(() => {});
-  $('#infoList').innerHTML = [['map-pin', CONFIG.direccion], ['clock', CONFIG.horarios], ['phone', CONFIG.telefono], ['message-circle', 'WhatsApp: ' + CONFIG.telefono]]
-    .map(([i, t]) => `<li><i data-lucide="${i}"></i>${t}</li>`).join('');
+  const TIPO = { urgente: 'Aviso', info: 'Novedad', torneo: 'Torneo' };
+  AvisosAPI.listar().then(as => {
+    const items = as.filter(a => a.tipo !== 'urgente').slice(0, 3);
+    if (!items.length) return;
+    $('#newsGrid').innerHTML = items.map(a => `<article class="news-card glass"><span class="tag t-${a.tipo}">${TIPO[a.tipo]}</span><small>${fechaCorta(a.fecha)}</small><h3>${a.titulo}</h3><p>${a.texto}</p>${a.enlace ? `<a href="${a.enlace}" class="link">Ver más →</a>` : ''}</article>`).join('');
+    $('#novedades').hidden = false;
+  }).catch(() => {});
+  ProfesoresAPI.listar().then(ps => { $('#profesGrid').innerHTML = ps.map(profeCardHTML).join(''); }).catch(() => {});
+  $('#infoCards').innerHTML = [['map-pin', 'Dirección', CONFIG.direccion], ['clock', 'Horarios', CONFIG.horarios], ['phone', 'Contacto', CONFIG.telefono + '<br>@' + CONFIG.instagram.split('/').pop()]]
+    .map(([i, t, v]) => `<article class="info-card glass reveal"><i data-lucide="${i}"></i><h3>${t}</h3><p>${v}</p></article>`).join('');
   const q = encodeURIComponent(CONFIG.direccion || CONFIG.mapsQuery);
   $('#btnMaps').href = `https://www.google.com/maps/search/?api=1&query=${q}`;
   $('#btnWsp').href = $('#fWsp').href = `https://wa.me/${CONFIG.whatsapp}`;
@@ -57,7 +68,7 @@ function efectos() {
   document.querySelectorAll('.reveal').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
 
   // Cursor y botones magnéticos (solo con mouse)
-  if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce) {
+  if (!matchMedia('(pointer: coarse)').matches && !reduce) {
     const cur = $('#cursor'); document.body.classList.add('has-cursor');
     addEventListener('mousemove', e => { cur.style.transform = `translate(${e.clientX}px,${e.clientY}px)`; });
     document.addEventListener('mouseover', e => cur.classList.toggle('big', !!e.target.closest('a,button')));

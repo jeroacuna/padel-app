@@ -30,3 +30,15 @@ const ProfesoresAPI = {
     return data;
   }
 };
+
+/* Ayudas compartidas (inicio y página de profesores) */
+const DIAS_C = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const profeAvatar = p => p.foto
+  ? `<div class="avatar" style="background-image:url('${p.foto}')" role="img" aria-label="${p.nombre}"></div>`
+  : `<div class="avatar" aria-hidden="true">${p.nombre.split(' ').map(x => x[0]).slice(0, 2).join('')}</div>`;
+const profeCardHTML = p => `<article class="prof-card glass">${profeAvatar(p)}<small>${p.especialidad}</small><h3>${p.nombre}</h3>
+  <div class="chips">${(p.etiquetas || []).map(t => `<span class="chip">${t}</span>`).join('')}</div>
+  <p>${p.bio}</p>
+  <div class="dias-chips">${[1, 2, 3, 4, 5, 6, 0].filter(d => (p.horarios[d] || []).length).map(d => `<i>${DIAS_C[d]}</i>`).join('')}</div>
+  <p class="price"><b>${CONFIG.moneda}${p.precio.toLocaleString('es-AR')}</b> <small>/ clase de ${p.duracion} min</small></p>
+  <a class="btn btn-lime" href="profesores.html?id=${p.id}">Ver horarios y reservar</a></article>`;

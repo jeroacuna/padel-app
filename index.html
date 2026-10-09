@@ -64,6 +64,13 @@
   </div>
 </section>
 
+<section id="novedades" class="sec dark" hidden>
+  <div class="wrap">
+    <h2 class="reveal">Novedades</h2>
+    <div class="news" id="newsGrid"></div>
+  </div>
+</section>
+
 <section id="canchas" class="sec dark">
   <div class="wrap">
     <h2 class="reveal">Nuestras canchas</h2>
@@ -85,6 +92,14 @@
   </div>
 </section>
 
+<section id="clases" class="sec">
+  <div class="wrap">
+    <h2 class="reveal">Clases con profesores</h2>
+    <div class="t-list" id="profesGrid"></div>
+    <a class="btn btn-ghost" href="profesores.html" style="margin-top:1.4rem">Ver todos los profesores</a>
+  </div>
+</section>
+
 <section id="eventos" class="sec">
   <div class="wrap">
     <h2 class="reveal">Torneos y eventos</h2>
@@ -96,6 +111,7 @@
   <div class="wrap">
     <h2 class="reveal">Reservá tu cancha</h2>
     <div class="booking">
+      <div class="pre-banner" id="preBanner" hidden></div>
       <div class="steps" id="stepsBar"><span>Fecha</span><span>Horario</span><span>Cancha</span><span>Resumen</span><span>Tus datos</span></div>
       <div class="bk-grid">
         <div class="bk-col">
@@ -140,23 +156,25 @@
 </section>
 
 <section id="contacto" class="sec dark">
-  <div class="wrap two">
-    <div>
-      <h2 class="reveal">Dónde estamos</h2>
-      <ul class="info" id="infoList"></ul>
-      <div class="hero-btns">
-        <a class="btn btn-ghost" id="btnMaps" target="_blank" rel="noopener">Abrir en Google Maps</a>
-        <a class="btn btn-lime" id="btnWsp" target="_blank" rel="noopener">Contactar por WhatsApp</a>
+  <div class="wrap">
+    <h2 class="reveal">Dónde estamos</h2>
+    <div class="info-cards" id="infoCards"></div>
+    <div class="contact-grid">
+      <div class="map-wrap">
+        <iframe id="mapa" title="Mapa" loading="lazy"></iframe>
+        <div class="map-actions">
+          <a class="btn btn-ghost" id="btnMaps" target="_blank" rel="noopener">Abrir en Google Maps</a>
+          <a class="btn btn-lime" id="btnWsp" target="_blank" rel="noopener">Contactar por WhatsApp</a>
+        </div>
       </div>
-      <iframe id="mapa" title="Mapa" loading="lazy"></iframe>
+      <form id="formContacto" class="glass contact">
+        <h3>Escribinos</h3>
+        <input name="nombre" placeholder="Nombre" required>
+        <input name="email" type="email" placeholder="Email" required>
+        <textarea name="mensaje" rows="5" placeholder="Mensaje" required></textarea>
+        <button class="btn btn-lime" type="submit">Enviar por WhatsApp</button>
+      </form>
     </div>
-    <form id="formContacto" class="glass contact">
-      <h3>Escribinos</h3>
-      <input name="nombre" placeholder="Nombre" required>
-      <input name="email" type="email" placeholder="Email" required>
-      <textarea name="mensaje" rows="5" placeholder="Mensaje" required></textarea>
-      <button class="btn btn-lime" type="submit">Enviar por WhatsApp</button>
-    </form>
   </div>
 </section>
 
@@ -178,7 +196,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/supabase.js"></script>
+<script src="js/extras.js"></script>
 <script src="js/torneos-api.js"></script>
+<script src="js/profesores-api.js"></script>
 <script src="js/reservations.js"></script>
 <script src="js/main.js"></script>
 <script src="js/fx.js"></script>
