@@ -1,0 +1,14 @@
+# Credenciales y configuración local
+.env
+.env.*
+!.env.example
+supabase/.temp/
+
+# Dependencias y salidas generadas
+node_modules/
+dist/
+coverage/
+
+# Sistema operativo y editor
+.DS_Store
+Thumbs.db

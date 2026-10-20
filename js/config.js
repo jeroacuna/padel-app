@@ -1,5 +1,6 @@
 /* ===== TODO LO EDITABLE VIVE ACÁ ===== */
 const CONFIG = {
+  modo: 'produccion', // 'produccion' (Supabase real) o 'demo' (datos locales de ejemplo)
   nombre: 'PADEL ARENA',
   telefono: '+54 9 343 695-8831',
   whatsapp: '5493436958831',

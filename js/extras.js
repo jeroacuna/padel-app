@@ -1,7 +1,8 @@
 /* Se carga en todas las páginas: botón flotante de WhatsApp + barra de avisos urgentes. */
 const AvisosAPI = {
   async listar() { // solo avisos activos, los más nuevos primero
-    if (!db) return AVISOS.filter(a => a.activo).sort((a, b) => b.fecha.localeCompare(a.fecha));
+    exigirDb();
+    if (DEMO) return AVISOS.filter(a => a.activo).sort((a, b) => b.fecha.localeCompare(a.fecha));
     const { data, error } = await db.from('avisos').select('*').eq('activo', true).order('fecha', { ascending: false });
     if (error) throw error;
     return data;

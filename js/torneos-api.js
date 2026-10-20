@@ -6,14 +6,16 @@ const TorneosAPI = {
   KEY: 'padelarena_inscripciones',
   _loc() { try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; } },
   async listar() {
-    if (!db) return TORNEOS.map(t => ({ ...t, inscriptos: t.inscriptos + this._loc().filter(i => i.torneo_id === t.id).length }));
+    exigirDb();
+    if (DEMO) return TORNEOS.map(t => ({ ...t, inscriptos: t.inscriptos + this._loc().filter(i => i.torneo_id === t.id).length }));
     const { data, error } = await db.from('torneos_info').select('*').order('fecha');
     if (error) throw error;
     return data;
   },
   async obtener(id) { return (await this.listar()).find(t => t.id === +id); },
   async inscribir(t, d) { // d: categoria, jugador1, jugador2, telefono, email
-    if (!db) {
+    exigirDb();
+    if (DEMO) {
       const actual = (await this.obtener(t.id));
       if (actual.inscriptos >= actual.cupos) throw new Error('Los cupos de este torneo están completos.');
       const codigo = Date.now().toString(36).toUpperCase().slice(-6);

@@ -5,13 +5,15 @@ const ReservasAPI = {
   KEY: 'padelarena_reservas',
   _all() { try { return JSON.parse(localStorage.getItem(this.KEY)) || []; } catch { return []; } },
   async porFecha(fecha) {
-    if (!db) return this._all().filter(r => r.fecha === fecha);
+    exigirDb();
+    if (DEMO) return this._all().filter(r => r.fecha === fecha);
     const { data, error } = await db.rpc('ocupados', { p_fecha: fecha });
     if (error) throw error;
     return data.map(r => ({ hora: r.hora, canchaId: r.cancha_id }));
   },
   async crear(r) {
-    if (!db) { // modo local
+    exigirDb();
+    if (DEMO) { // modo local
       const all = this._all();
       if (all.some(x => x.fecha === r.fecha && x.hora === r.hora && x.canchaId === r.canchaId))
         throw new Error('Ese turno ya fue reservado. Elegí otro.');
@@ -43,7 +45,7 @@ const Reserva = {
   hh: h => `${String(h).padStart(2, '0')}:00`,
   ocupada(c, h) {
     const e = this.estado;
-    return (!db && ocupadoSim(e.fecha, c.id, h)) || e.guardadas.some(r => r.hora === h && r.canchaId === c.id);
+    return (DEMO && ocupadoSim(e.fecha, c.id, h)) || e.guardadas.some(r => r.hora === h && r.canchaId === c.id);
   },
   pasada(h) {
     const hoy = new Date();

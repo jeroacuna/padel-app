@@ -261,3 +261,6 @@ body.has-aviso #navbar{top:38px}body.has-aviso .hero{padding-top:calc(7rem + 38p
 .steps3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem}
 .steps3 div{padding:1.3rem;border-radius:1rem;border:1px solid var(--line);background:var(--glass);color:var(--muted)}
 .steps3 b{display:block;font:italic 800 2.4rem var(--font-d);color:var(--lime)}
+/* Cartel de modo (demo / sin conexión) */
+.modo-demo,.modo-error{position:fixed;left:50%;bottom:.8rem;transform:translateX(-50%);z-index:70;padding:.45rem 1rem;border-radius:99px;font-size:.78rem;font-weight:800;text-align:center;max-width:92vw;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.modo-demo{background:#f59e0b;color:#07122e}.modo-error{background:#ef4444;color:#fff}

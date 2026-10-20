@@ -1,6 +1,7 @@
 // Edge Function: avisa por email cuando se reserva una clase.
 // La web solo manda el CÓDIGO de la reserva; los datos y el destinatario salen de la base y de los secrets,
 // así nadie puede usar esta función para mandar mails a cualquiera.
+// @ts-nocheck
 const SB = Deno.env.get('SUPABASE_URL')!;
 const SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const RESEND = Deno.env.get('RESEND_API_KEY')!;
