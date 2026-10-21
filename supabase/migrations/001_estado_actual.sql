@@ -1,6 +1,4 @@
--- 001 · Estado actual (línea base)
--- Reproduce lo que ya está desplegado + lo de mejoras.sql. Es seguro correrlo sobre la base actual: NO borra datos.
--- Regla: cada migración se corre UNA sola vez y en orden (001 → 002 → ...).
+
 
 create table if not exists canchas (id int primary key, nombre text not null, tipo text not null, precio int not null);
 

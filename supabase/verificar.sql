@@ -1,5 +1,4 @@
--- Verificación después de correr 001 y 002 (solo lectura). Pegar en el SQL Editor.
--- Esperado: anon solo tiene SELECT en canchas, torneos, profesores, avisos, torneos_info, config_complejo.
+
 select table_name, string_agg(privilege_type, ', ') as permisos
 from information_schema.role_table_grants
 where grantee = 'anon' and table_schema = 'public' group by 1 order by 1;

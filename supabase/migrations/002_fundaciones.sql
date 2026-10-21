@@ -1,6 +1,4 @@
--- 002 · Fundaciones del panel de administración
--- Qué hace: hora argentina, validaciones en el servidor, estados de reserva, índice único parcial,
--- tabla de admins, permisos mínimos. NO borra datos. Correr UNA vez, después de 001.
+
 
 -- 0) Hora de Argentina (el servidor trabaja en UTC)
 create or replace function ahora_ar() returns timestamp language sql stable as

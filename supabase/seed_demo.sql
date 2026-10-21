@@ -1,4 +1,4 @@
--- Datos de ejemplo (idempotente: solo inserta si la tabla está vacía). Opcional.
+
 insert into canchas (id, nombre, tipo, precio) values
   (1,'Cancha 1','Panorámica',18000),(2,'Cancha 2','Panorámica',18000),(3,'Cancha 3','Indoor',20000),(4,'Cancha 4','Indoor',20000)
 on conflict (id) do nothing;

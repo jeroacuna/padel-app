@@ -1,4 +1,3 @@
--- Pegar completo en Supabase → SQL Editor → Run (después de schema.sql y profesores.sql)
 
 -- 1) Avisos y novedades
 create table avisos (

@@ -1,4 +1,4 @@
--- Pegar completo en Supabase → SQL Editor → Run (después de schema.sql)
+
 
 create table profesores (
   id serial primary key, nombre text not null, especialidad text not null, bio text,

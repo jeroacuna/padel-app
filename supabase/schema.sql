@@ -1,4 +1,4 @@
--- Pegar completo en Supabase → SQL Editor → Run
+
 
 create table canchas (id int primary key, nombre text not null, tipo text not null, precio int not null);
 
