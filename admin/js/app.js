@@ -17,7 +17,7 @@ const $ = (id) => document.getElementById(id);
 let perfil = null;
 
 function fallo(texto) {
-  document.body.innerHTML = `<div class="fallo"><h1>No se puede abrir el panel</h1><p>${esc(texto)}</p><a class="btn" href="index.html">Ir al ingreso</a></div>`;
+  document.body.innerHTML = `<div class="fallo"><h1>No se puede abrir el panel</h1><p>${esc(texto)}</p><a class="btn" href="/admin/index.html">Ir al ingreso</a></div>`;
 }
 
 function pintarShell() {
@@ -48,9 +48,9 @@ async function ir() {
 (async () => {
   if (!disponible()) return fallo('No hay conexión con el servidor o la web está en modo demo.');
   try { perfil = await obtenerPerfil(); } catch (e) { return fallo(e.message); }
-  if (!perfil) return location.replace('index.html'); // sin sesión o sin permisos: afuera
+  if (!perfil) return location.replace('/admin/index.html'); // sin sesión o sin permisos: afuera
   pintarShell();
   window.addEventListener('hashchange', ir);
-  db.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.replace('index.html'); });
+  db.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.replace('/admin/index.html'); });
   ir();
 })();

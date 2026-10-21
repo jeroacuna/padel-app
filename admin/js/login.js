@@ -7,7 +7,7 @@ if (!disponible()) {
   decir('El panel no está disponible: no hay conexión con el servidor o la web está en modo demo.');
   btn.disabled = true;
 } else {
-  obtenerPerfil().then((p) => { if (p) location.replace('app.html'); }).catch(() => {}); // si ya hay sesión, entra directo
+  obtenerPerfil().then((p) => { if (p) location.replace('/admin/app.html'); }).catch(() => {}); // si ya hay sesión, entra directo
 }
 
 form.addEventListener('submit', async (e) => {
@@ -16,7 +16,7 @@ form.addEventListener('submit', async (e) => {
   btn.disabled = true; btn.textContent = 'Ingresando…'; decir('');
   try {
     await iniciarSesion(form.email.value.trim(), form.password.value);
-    location.replace('app.html');
+    location.replace('/admin/app.html');
   } catch (err) {
     decir(err.message); btn.disabled = false; btn.textContent = 'Ingresar';
   }

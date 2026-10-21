@@ -22,5 +22,5 @@ export async function iniciarSesion(email, password) {
 
 export async function cerrarSesion() {
   await db.auth.signOut();
-  location.replace('index.html');
+  location.replace('/admin/index.html');
 }
