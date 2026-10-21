@@ -12,9 +12,10 @@ Estado: ✅ hecho · 🔄 en curso · ⬜ pendiente
 - ✅ Modo demo separado de producción (sin reservas locales falsas)
 - ✅ Edge Function movida a `supabase/functions/`
 - 🔄 Correr 001 y 002 en Supabase y verificar con `supabase/verificar.sql`
-### 1B · Panel: login y estructura ⬜
-- ⬜ `/admin/` con login (Supabase Auth), sesión, cierre de sesión, rutas protegidas
-- ⬜ Sidebar, layout y dashboard vacío; acceso solo si estás en `perfiles_admin`
+### 1B · Panel: login y estructura 🔄
+- ✅ `/admin/` con login (Supabase Auth), sesión persistente, cierre de sesión y pantalla protegida
+- ✅ Sidebar responsive, dashboard con estado real del sistema; acceso solo si estás en `perfiles_admin`
+- 🔄 Crear el primer administrador (`supabase/crear_admin.sql`) y probar el acceso
 
 ## Fase 2 · Reservas ⬜
 Dashboard, listado con filtros, calendario diario/semanal, alta manual, edición, cancelación, estados.

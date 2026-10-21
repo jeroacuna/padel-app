@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://TU-DOMINIO.com/sitemap.xml
+Disallow: /admin/
+Sitemap: https://padel-app-eight-tau.vercel.app/sitemap.xml
