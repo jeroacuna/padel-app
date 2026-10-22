@@ -1,29 +1,27 @@
-import { esc } from '../core/ui.js';
+import { esc, hoyAR, horaAR, fmtFecha, fmtFechaHora, hh } from '../core/ui.js';
+import { resumenDashboard } from '../core/api.js';
+
+const fila = (r, extra) => `<li><b>${fmtFecha(r.fecha)} · ${hh(r.hora)}</b><span>${esc(r.canchas?.nombre || '')} · ${esc(r.nombre)} ${esc(r.apellido)}</span>${extra || ''}</li>`;
 
 export async function render(el, { perfil }) {
   el.innerHTML = `
     <h1>Hola, ${esc(perfil.nombre)}</h1>
     <p class="sub">Panel de administración de ${esc(CONFIG.nombre)}</p>
-    <section class="cards">
-      <article class="card glass">
-        <h2>Estado del sistema</h2>
-        <ul class="estado">
-          <li>Sesión<b class="ok">${esc(perfil.email)}</b></li>
-          <li>Permisos<b class="ok">${perfil.rol === 'owner' ? 'Propietario' : 'Staff'} verificado en la base</b></li>
-          <li>Base de datos<b id="dbEstado">Comprobando…</b></li>
-        </ul>
-      </article>
-      <article class="card glass">
-        <h2>Lo que viene</h2>
-        <ul class="proximos">
-          <li><b>Fase 2</b>Reservas y calendario</li><li><b>Fase 3</b>Canchas y clientes</li>
-          <li><b>Fase 4</b>Pagos y estadísticas</li><li><b>Fase 5</b>Torneos, profesores y configuración</li>
-        </ul>
-      </article>
-    </section>`;
-  // Dato real, no simulado: cuántas canchas hay cargadas en la base
-  const { count, error } = await db.from('canchas').select('id', { count: 'exact', head: true });
-  const b = document.getElementById('dbEstado'); if (!b) return;
-  b.className = error ? 'mal' : 'ok';
-  b.textContent = error ? 'Sin respuesta de la base' : `Conectada · ${count} canchas cargadas`;
+    <section class="stats" id="stats"><p class="sub">Cargando datos…</p></section>
+    <section class="cards" id="listas"></section>
+    <p class="nota">Ingresos y pagos pendientes se habilitan en la Fase 4, cuando existan los pagos registrados.</p>`;
+  try {
+    const d = await resumenDashboard(hoyAR(), horaAR());
+    document.getElementById('stats').innerHTML = `
+      <article class="stat glass"><span>Reservas hoy</span><b>${d.hoy}</b></article>
+      <article class="stat glass"><span>Esta semana</span><b>${d.semana}</b></article>
+      <article class="stat glass"><span>Ocupación de hoy</span><b>${d.ocupacion}%</b></article>
+      <article class="stat glass"><span>Canchas activas</span><b>${d.canchasActivas}</b></article>`;
+    document.getElementById('listas').innerHTML = `
+      <article class="card glass"><h2>Próximos turnos</h2>${d.proximos.length ? `<ul class="lista">${d.proximos.map((r) => fila(r)).join('')}</ul>` : '<p class="vacio-txt">No hay turnos próximos.</p>'}</article>
+      <article class="card glass"><h2>Cancelaciones recientes</h2>${d.cancelaciones.length ? `<ul class="lista">${d.cancelaciones.map((r) => fila(r, `<small>${fmtFechaHora(r.updated_at)}</small>`)).join('')}</ul>` : '<p class="vacio-txt">Sin cancelaciones.</p>'}</article>`;
+  } catch (e) {
+    console.error(e);
+    document.getElementById('stats').innerHTML = `<p class="error-txt">No se pudieron cargar los datos: ${esc(e.message)}</p>`;
+  }
 }

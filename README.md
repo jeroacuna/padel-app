@@ -9,7 +9,7 @@ Proyecto final de Práctica Profesionalizante (carrera Full Stack).
 ```
 index.html, torneos.html, profesores.html   páginas públicas
 css/  js/  assets/                          estilos, lógica y recursos
-supabase/migrations/                        001 y 002: estructura de la base (correr en orden, una vez)
+supabase/migrations/                        001, 002, 003...: estructura de la base (correr en orden, una vez cada una)
 supabase/functions/enviar-email/            Edge Function de emails (Resend)
 supabase/seed_demo.sql                      datos de ejemplo (opcional)
 supabase/verificar.sql                      consultas para comprobar la base
@@ -35,6 +35,7 @@ ROADMAP.md                                  avance del proyecto
 - Primer administrador: crear el usuario en Supabase (Authentication → Users) y correr `supabase/crear_admin.sql`.
 - Recomendado: desactivar el registro público en Authentication ("Allow new users to sign up").
 - El panel no funciona en modo demo ni sin conexión.
+- Hoy permite: ver el dashboard, listar y filtrar reservas, y cambiar estado o reprogramar (todo queda en el historial).
 
 ## Seguridad (resumen)
 - Las tablas con datos personales (`reservas`, `inscripciones`, `clases`) tienen RLS y **ningún acceso directo** para visitantes.

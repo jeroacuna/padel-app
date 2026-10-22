@@ -3,22 +3,21 @@
 Estado: ✅ hecho · 🔄 en curso · ⬜ pendiente
 
 ## Fase 0 · Auditoría ✅
-- ✅ Revisión del repo, del esquema y de los permisos reales de Supabase.
+## Fase 1 · Base administrativa ✅
+- ✅ 1A: migraciones 001 y 002, modo demo separado de producción, validaciones y permisos mínimos
+- ✅ 1B: `/admin/` con login (Supabase Auth), sesión, rutas protegidas, sidebar responsive
 
-## Fase 1 · Base administrativa
-### 1A · Ordenar y asegurar 🔄
-- ✅ `.gitignore`, `README.md`, `ROADMAP.md`
-- ✅ Migraciones `001` (estado actual) y `002` (fundaciones): estados, índice único parcial, hora argentina, validaciones, permisos mínimos, tabla de admins
-- ✅ Modo demo separado de producción (sin reservas locales falsas)
-- ✅ Edge Function movida a `supabase/functions/`
-- 🔄 Correr 001 y 002 en Supabase y verificar con `supabase/verificar.sql`
-### 1B · Panel: login y estructura 🔄
-- ✅ `/admin/` con login (Supabase Auth), sesión persistente, cierre de sesión y pantalla protegida
-- ✅ Sidebar responsive, dashboard con estado real del sistema; acceso solo si estás en `perfiles_admin`
-- 🔄 Crear el primer administrador (`supabase/crear_admin.sql`) y probar el acceso
-
-## Fase 2 · Reservas ⬜
-Dashboard, listado con filtros, calendario diario/semanal, alta manual, edición, cancelación, estados.
+## Fase 2 · Reservas
+### 2A · Ver y gestionar 🔄
+- ✅ Migración 003: lectura de reservas solo para admins, cambio de estado, reprogramación y registro de cambios (auditoría)
+- ✅ Dashboard con datos reales: reservas de hoy y de la semana, ocupación, próximos turnos, cancelaciones recientes
+- ✅ Listado de reservas con filtros (fechas, cancha, estado, búsqueda), orden y paginación
+- ✅ Detalle de reserva: confirmar, completar, cancelar (con motivo), reactivar, reprogramar e historial
+- 🔄 Correr 003 en Supabase y probar con reservas reales
+### 2B · Calendario y reservas manuales ⬜
+- ⬜ Calendario diario y semanal (canchas en columnas)
+- ⬜ Alta manual de reservas (WhatsApp, teléfono, presencial) tocando un hueco libre
+- ⬜ Ingresos y pagos pendientes en el dashboard (se completan en la Fase 4)
 
 ## Fase 3 · Canchas y clientes ⬜
 ## Fase 4 · Pagos y estadísticas ⬜
@@ -28,10 +27,10 @@ Consulta de reserva por código, solicitud de cancelación, emails, SEO (`TU-DOM
 ## Fase 7 · Calidad y entrega ⬜
 Pruebas, accesibilidad, despliegue, documentación técnica y de usuario, demo para la PP.
 
-## Etapa posterior (después del núcleo)
+## Etapa posterior
 Reservas fijas · lista de espera · promociones · estadísticas avanzadas · notificaciones · ranking.
 
 ## Decisiones pendientes
-- Estado inicial de una reserva web: hoy `confirmada`. ¿Pasa a `pendiente` con vencimiento? (se define en Fase 2)
-- Reglas de cancelación (¿hasta cuántas horas antes?) (Fase 6)
-- Roles: hoy `owner` y `staff` (a ajustar en Fase 1B)
+- Estado inicial de una reserva web: hoy `confirmada`. ¿Pasa a `pendiente` con vencimiento?
+- Reglas de cancelación para jugadores (Fase 6)
+- Permisos distintos para `owner` y `staff` (hoy pueden hacer lo mismo)

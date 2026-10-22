@@ -3,9 +3,9 @@ import { esc } from './core/ui.js';
 
 // Módulos del panel. "fase" = cuándo se habilita; sin fase = ya funciona.
 const RUTAS = {
-  dashboard:     { t: 'Dashboard',     i: 'layout-dashboard' },
-  reservas:      { t: 'Reservas',      i: 'calendar-check', fase: 2, d: 'Listado con filtros, detalle, alta manual, edición, cancelación y estados.' },
-  calendario:    { t: 'Calendario',    i: 'calendar-days',  fase: 2, d: 'Vista diaria y semanal con las canchas en columnas.' },
+  dashboard:     { t: 'Dashboard',     i: 'layout-dashboard', mod: 'dashboard' },
+  reservas:      { t: 'Reservas',      i: 'calendar-check', mod: 'reservas' },
+  calendario:    { t: 'Calendario',    i: 'calendar-days',  fase: '2B', d: 'Vista diaria y semanal con las canchas en columnas, y alta manual de reservas tocando un hueco libre.' },
   canchas:       { t: 'Canchas',       i: 'layers',         fase: 3, d: 'Alta, precios, activar o desactivar, y bloqueos por lluvia o mantenimiento.' },
   clientes:      { t: 'Clientes',      i: 'users',          fase: 3, d: 'Búsqueda, historial de reservas y observaciones.' },
   pagos:         { t: 'Pagos',         i: 'wallet',         fase: 4, d: 'Señas, pagos parciales, saldos e ingresos por día, semana y mes.' },
@@ -41,7 +41,7 @@ async function ir() {
     el.innerHTML = `<h1>${ruta.t}</h1><div class="glass vacio" style="margin-top:1.4rem"><h2>Disponible en la Fase ${ruta.fase}</h2><p>${ruta.d}</p></div>`;
     return;
   }
-  try { (await import('./modules/dashboard.js')).render(el, { perfil }); }
+  try { (await import(`./modules/${ruta.mod}.js`)).render(el, { perfil }); }
   catch (e) { console.error(e); el.innerHTML = '<p>No se pudo cargar esta sección.</p>'; }
 }
 
