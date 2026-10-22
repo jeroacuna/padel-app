@@ -8,15 +8,17 @@ Estado: ✅ hecho · 🔄 en curso · ⬜ pendiente
 - ✅ 1B: `/admin/` con login (Supabase Auth), sesión, rutas protegidas, sidebar responsive
 
 ## Fase 2 · Reservas
-### 2A · Ver y gestionar 🔄
+### 2A · Ver y gestionar ✅
 - ✅ Migración 003: lectura de reservas solo para admins, cambio de estado, reprogramación y registro de cambios (auditoría)
 - ✅ Dashboard con datos reales: reservas de hoy y de la semana, ocupación, próximos turnos, cancelaciones recientes
 - ✅ Listado de reservas con filtros (fechas, cancha, estado, búsqueda), orden y paginación
 - ✅ Detalle de reserva: confirmar, completar, cancelar (con motivo), reactivar, reprogramar e historial
 - 🔄 Correr 003 en Supabase y probar con reservas reales
-### 2B · Calendario y reservas manuales ⬜
-- ⬜ Calendario diario y semanal (canchas en columnas)
-- ⬜ Alta manual de reservas (WhatsApp, teléfono, presencial) tocando un hueco libre
+### 2B · Calendario y reservas manuales 🔄
+- ✅ Migración 004: alta manual de reservas (WhatsApp, teléfono, presencial) con validaciones y registro de cambios
+- ✅ Calendario diario (canchas en columnas, horarios en filas) y semanal (ocupación por franja)
+- ✅ Tocar un hueco libre abre el alta manual con cancha, fecha y hora ya elegidas; tocar una reserva abre su detalle
+- 🔄 Correr 003 y 004 en Supabase y probar con reservas reales
 - ⬜ Ingresos y pagos pendientes en el dashboard (se completan en la Fase 4)
 
 ## Fase 3 · Canchas y clientes ⬜

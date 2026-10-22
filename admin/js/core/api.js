@@ -16,7 +16,7 @@ export async function horario() { // horario de atención desde la base (config_
 }
 
 export async function canchas() {
-  const { data, error } = await db.from('canchas').select('id, nombre, tipo, activa').order('id'); lanzar(error); return data;
+  const { data, error } = await db.from('canchas').select('id, nombre, tipo, activa, precio').order('id'); lanzar(error); return data;
 }
 
 const limpiar = (t) => t.replace(/[,()%*\\]/g, ' ').trim(); // evita romper el filtro de búsqueda
@@ -65,4 +65,16 @@ export async function resumenDashboard(hoy, hora) {
   [h, s, prox, canc].forEach((r) => lanzar(r.error, r.status));
   const activas = cs.filter((c) => c.activa).length, huecos = activas * (hor.fin - hor.ini + 1);
   return { hoy: h.count, semana: s.count, canchasActivas: activas, ocupacion: huecos ? Math.round((h.count / huecos) * 100) : 0, proximos: prox.data, cancelaciones: canc.data };
+}
+
+export async function reservasRango(desde, hasta) { // reservas no canceladas entre dos fechas (para el calendario)
+  const { data, error, status } = await db.from('reservas').select('id, fecha, hora, cancha_id, estado, pago_estado, nombre, apellido')
+    .neq('estado', 'cancelada').gte('fecha', desde).lte('fecha', hasta).order('fecha').order('hora');
+  lanzar(error, status); return data;
+}
+export async function crearReservaManual(d) {
+  const { data, error, status } = await db.rpc('admin_crear_reserva', {
+    p_fecha: d.fecha, p_hora: d.hora, p_cancha: d.cancha, p_nombre: d.nombre, p_apellido: d.apellido, p_telefono: d.telefono,
+    p_email: d.email, p_origen: d.origen, p_estado: d.estado, p_precio: d.precio, p_notas: d.notas });
+  lanzar(error, status); return data;
 }

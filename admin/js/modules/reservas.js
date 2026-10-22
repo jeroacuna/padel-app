@@ -1,5 +1,8 @@
 import { esc, hoyAR, horaAR, fmtFecha, fmtFechaHora, hh, money, waLink, ESTADO, PAGO, badge, toast, abrirModal } from '../core/ui.js';
 import * as api from '../core/api.js';
+import { abrirAltaManual } from './reserva-manual.js';
+
+let hook = null; // función a llamar cuando algo cambia (la usa el calendario para refrescarse)
 
 const TAM = 20;
 const F = { desde: '', hasta: '', cancha: '', estado: '', q: '', orden: 'asc', pagina: 0 };
@@ -10,7 +13,7 @@ export async function render(el) {
   let canchas = []; try { canchas = await api.canchas(); } catch (e) { console.error(e); }
   const op = (v, t, sel) => `<option value="${esc(v)}" ${sel ? 'selected' : ''}>${esc(t)}</option>`;
   el.innerHTML = `
-    <h1>Reservas</h1><p class="sub">Todas las reservas del complejo</p>
+    <div class="enc"><div><h1>Reservas</h1><p class="sub">Todas las reservas del complejo</p></div><button class="btn" id="nueva">+ Nueva reserva</button></div>
     <form class="filtros glass" id="filtros" onsubmit="return false">
       <label>Desde<input type="date" name="desde" value="${F.desde}"></label>
       <label>Hasta<input type="date" name="hasta" value="${F.hasta}"></label>
@@ -24,12 +27,13 @@ export async function render(el) {
   const form = el.querySelector('#filtros');
   let t; const leer = () => { Object.assign(F, Object.fromEntries(new FormData(form)), { pagina: 0 }); cargar(); };
   form.addEventListener('input', () => { clearTimeout(t); t = setTimeout(leer, 300); });
+  el.querySelector('#nueva').onclick = () => abrirAltaManual({}, cargar);
   el.querySelector('#limpiar').onclick = () => { Object.assign(F, { desde: '', hasta: '', cancha: '', estado: '', q: '', orden: 'asc', pagina: 0 }); render(el); };
   el.querySelector('#lista').addEventListener('click', (e) => {
     const pag = e.target.closest('[data-pag]'); if (pag) { F.pagina += +pag.dataset.pag; cargar(); return; }
-    const fila = e.target.closest('tr[data-id]'); if (fila) detalle(fila.dataset.id);
+    const fila = e.target.closest('tr[data-id]'); if (fila) abrirDetalle(fila.dataset.id);
   });
-  el.querySelector('#lista').addEventListener('keydown', (e) => { const fila = e.target.closest('tr[data-id]'); if (fila && e.key === 'Enter') detalle(fila.dataset.id); });
+  el.querySelector('#lista').addEventListener('keydown', (e) => { const fila = e.target.closest('tr[data-id]'); if (fila && e.key === 'Enter') abrirDetalle(fila.dataset.id); });
   cargar();
 }
 
@@ -63,12 +67,13 @@ const ACCIONES = {
 };
 const ETIQ = { cambiar_estado: 'Cambio de estado', reprogramar: 'Reprogramada' };
 
-async function detalle(id) {
+export async function abrirDetalle(id, alCambiar) {
+  hook = alCambiar || null;
   const m = abrirModal('<p>Cargando…</p>');
   try { pintar(m, await api.obtenerReserva(id), await api.historial(id)); }
   catch (e) { m.el.innerHTML = `<p class="error-txt">${esc(e.message)}</p>`; }
 }
-async function refrescar(m, id) { pintar(m, await api.obtenerReserva(id), await api.historial(id)); cargar(); }
+async function refrescar(m, id) { pintar(m, await api.obtenerReserva(id), await api.historial(id)); cargar(); if (hook) hook(); }
 
 function resumenCambio(h) {
   const d = h.detalle || {};
@@ -86,8 +91,8 @@ function pintar(m, r, hist) {
     <p>${badge(r.estado, ESTADO[r.estado] || r.estado)} ${badge('p-' + r.pago_estado, PAGO[r.pago_estado] || r.pago_estado)}</p>
     <dl class="datos">
       <dt>Cliente</dt><dd>${esc(r.nombre)} ${esc(r.apellido)}</dd>
-      <dt>Teléfono</dt><dd>${esc(r.telefono)} · <a href="${esc(waLink(r.telefono))}" target="_blank" rel="noopener">WhatsApp</a></dd>
-      <dt>Email</dt><dd>${esc(r.email)}</dd>
+      <dt>Teléfono</dt><dd>${r.telefono ? `${esc(r.telefono)} · <a href="${esc(waLink(r.telefono))}" target="_blank" rel="noopener">WhatsApp</a>` : '—'}</dd>
+      <dt>Email</dt><dd>${esc(r.email) || '—'}</dd>
       <dt>Precio</dt><dd>${money(r.precio)}</dd>
       <dt>Origen</dt><dd>${esc(r.origen)}</dd>
       <dt>Creada</dt><dd>${fmtFechaHora(r.created_at)}</dd>
@@ -149,4 +154,4 @@ async function panelReprogramar(m, r) {
   sp.querySelector('#rpNo').onclick = () => { sp.innerHTML = ''; };
   ok.onclick = () => aplicar(m, r.id, () => api.reprogramar(r.id, fecha.value, hora, +cancha.value), ok);
   pintarHoras();
-}
+} 

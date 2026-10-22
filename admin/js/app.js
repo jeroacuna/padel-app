@@ -5,7 +5,7 @@ import { esc } from './core/ui.js';
 const RUTAS = {
   dashboard:     { t: 'Dashboard',     i: 'layout-dashboard', mod: 'dashboard' },
   reservas:      { t: 'Reservas',      i: 'calendar-check', mod: 'reservas' },
-  calendario:    { t: 'Calendario',    i: 'calendar-days',  fase: '2B', d: 'Vista diaria y semanal con las canchas en columnas, y alta manual de reservas tocando un hueco libre.' },
+  calendario:    { t: 'Calendario',    i: 'calendar-days',  mod: 'calendario' },
   canchas:       { t: 'Canchas',       i: 'layers',         fase: 3, d: 'Alta, precios, activar o desactivar, y bloqueos por lluvia o mantenimiento.' },
   clientes:      { t: 'Clientes',      i: 'users',          fase: 3, d: 'Búsqueda, historial de reservas y observaciones.' },
   pagos:         { t: 'Pagos',         i: 'wallet',         fase: 4, d: 'Señas, pagos parciales, saldos e ingresos por día, semana y mes.' },
