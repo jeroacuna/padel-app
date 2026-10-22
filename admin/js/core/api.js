@@ -1,7 +1,11 @@
 /* Acceso a datos del panel. La seguridad real está en la base: estas consultas solo devuelven algo si sos administrador. */
 import { sumarDias } from './ui.js';
 
-const lanzar = (error) => { if (error) throw new Error(error.message || 'Error inesperado'); };
+const lanzar = (error, status) => { // convierte el error de Supabase en un mensaje que se entienda
+  if (!error) return;
+  if (status === 401 || status === 403 || error.code === '42501') throw new Error('Sin permiso para leer o modificar estos datos. ¿Corriste la migración 003 en Supabase?');
+  throw new Error(error.message || error.details || `Error inesperado${status ? ' (' + status + ')' : ''}`);
+};
 
 let _horario;
 export async function horario() { // horario de atención desde la base (config_complejo)
@@ -25,12 +29,12 @@ export async function listarReservas({ desde, hasta, cancha, estado, q, orden = 
   const t = limpiar(q || '');
   if (t) qb = qb.or(['nombre', 'apellido', 'telefono', 'email', 'codigo'].map((c) => `${c}.ilike.%${t}%`).join(','));
   const asc = orden === 'asc';
-  const { data, count, error } = await qb.order('fecha', { ascending: asc }).order('hora', { ascending: asc }).range(pagina * tam, pagina * tam + tam - 1);
-  lanzar(error); return { filas: data, total: count };
+  const { data, count, error, status } = await qb.order('fecha', { ascending: asc }).order('hora', { ascending: asc }).range(pagina * tam, pagina * tam + tam - 1);
+  lanzar(error, status); return { filas: data, total: count };
 }
 
 export async function obtenerReserva(id) {
-  const { data, error } = await db.from('reservas').select('*, canchas(nombre, tipo)').eq('id', id).single(); lanzar(error); return data;
+  const { data, error, status } = await db.from('reservas').select('*, canchas(nombre, tipo)').eq('id', id).single(); lanzar(error, status); return data;
 }
 export async function historial(id) {
   const { data, error } = await db.from('auditoria').select('accion, detalle, quien, created_at').eq('tabla', 'reservas').eq('registro_id', id).order('created_at', { ascending: false });
@@ -58,7 +62,7 @@ export async function resumenDashboard(hoy, hora) {
     db.from('reservas').select('fecha, hora, nombre, apellido, updated_at, canchas(nombre)').eq('estado', 'cancelada').order('updated_at', { ascending: false }).limit(5),
     horario(),
   ]);
-  [h, s, prox, canc].forEach((r) => lanzar(r.error));
+  [h, s, prox, canc].forEach((r) => lanzar(r.error, r.status));
   const activas = cs.filter((c) => c.activa).length, huecos = activas * (hor.fin - hor.ini + 1);
   return { hoy: h.count, semana: s.count, canchasActivas: activas, ocupacion: huecos ? Math.round((h.count / huecos) * 100) : 0, proximos: prox.data, cancelaciones: canc.data };
 }

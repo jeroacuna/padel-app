@@ -4,7 +4,7 @@ create table if not exists auditoria (
   tabla text not null, registro_id text not null, accion text not null,
   detalle jsonb not null default '{}',
   quien text, user_id uuid,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now() 
 );
 create index if not exists auditoria_registro_idx on auditoria (tabla, registro_id, created_at desc);
 alter table auditoria enable row level security;
