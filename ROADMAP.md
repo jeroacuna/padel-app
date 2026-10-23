@@ -14,14 +14,20 @@ Estado: ✅ hecho · 🔄 en curso · ⬜ pendiente
 - ✅ Listado de reservas con filtros (fechas, cancha, estado, búsqueda), orden y paginación
 - ✅ Detalle de reserva: confirmar, completar, cancelar (con motivo), reactivar, reprogramar e historial
 - 🔄 Correr 003 en Supabase y probar con reservas reales
-### 2B · Calendario y reservas manuales 🔄
+### 2B · Calendario y reservas manuales ✅
 - ✅ Migración 004: alta manual de reservas (WhatsApp, teléfono, presencial) con validaciones y registro de cambios
 - ✅ Calendario diario (canchas en columnas, horarios en filas) y semanal (ocupación por franja)
 - ✅ Tocar un hueco libre abre el alta manual con cancha, fecha y hora ya elegidas; tocar una reserva abre su detalle
 - 🔄 Correr 003 y 004 en Supabase y probar con reservas reales
 - ⬜ Ingresos y pagos pendientes en el dashboard (se completan en la Fase 4)
 
-## Fase 3 · Canchas y clientes ⬜
+## Fase 3 · Canchas y clientes 🔄
+- ✅ Migración 005: administrar canchas (nunca se borran), bloqueos (lluvia, mantenimiento, eventos) que respetan la web y el panel, clientes sin duplicados con historial
+- ✅ Canchas: crear, editar nombre/tipo/precio, activar o desactivar con aviso de reservas próximas
+- ✅ Bloqueos por cancha o para todas, por fechas y horas, con botón "Cerrar hoy por lluvia"; el calendario los muestra
+- ✅ Clientes: búsqueda, frecuentes, historial de reservas, notas administrativas y edición de datos
+- ✅ La web pública toma nombre, precio y estado de las canchas desde la base
+- 🔄 Correr 003, 004 y 005 en Supabase y probar con datos reales
 ## Fase 4 · Pagos y estadísticas ⬜
 ## Fase 5 · Torneos, profesores y configuración ⬜
 ## Fase 6 · Experiencia del jugador ⬜

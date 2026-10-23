@@ -78,3 +78,48 @@ export async function crearReservaManual(d) {
     p_email: d.email, p_origen: d.origen, p_estado: d.estado, p_precio: d.precio, p_notas: d.notas });
   lanzar(error, status); return data;
 }
+
+/* ---------- Fase 3: canchas, bloqueos, clientes ---------- */
+export async function guardarCancha(c) {
+  const { data, error, status } = await db.rpc('admin_guardar_cancha', { p_id: c.id ?? null, p_nombre: c.nombre, p_tipo: c.tipo, p_precio: c.precio, p_activa: c.activa });
+  lanzar(error, status); return data;
+}
+export async function reservasProximasPorCancha(hoy) { // { cancha_id: cantidad } de reservas no canceladas desde hoy
+  const { data, error, status } = await db.from('reservas').select('cancha_id').neq('estado', 'cancelada').gte('fecha', hoy); lanzar(error, status);
+  return data.reduce((m, r) => ((m[r.cancha_id] = (m[r.cancha_id] || 0) + 1), m), {});
+}
+export async function bloqueosVigentes(hoy) {
+  const { data, error, status } = await db.from('bloqueos_cancha').select('*').gte('fecha_hasta', hoy).order('fecha_desde'); lanzar(error, status); return data;
+}
+export async function bloqueosRango(desde, hasta) {
+  const { data, error, status } = await db.from('bloqueos_cancha').select('*').lte('fecha_desde', hasta).gte('fecha_hasta', desde); lanzar(error, status); return data;
+}
+export async function crearBloqueo(b) { // devuelve { id, afectadas }
+  const { data, error, status } = await db.rpc('admin_crear_bloqueo', { p_cancha: b.cancha ?? null, p_desde: b.desde, p_hasta: b.hasta, p_hora_ini: b.horaIni, p_hora_fin: b.horaFin, p_tipo: b.tipo, p_motivo: b.motivo || null });
+  lanzar(error, status); return data;
+}
+export async function quitarBloqueo(id) { const { error, status } = await db.rpc('admin_quitar_bloqueo', { p_id: id }); lanzar(error, status); }
+
+export async function listarClientes({ q, orden = 'ultima', frecuentes = false, pagina = 0, tam = 20 }) {
+  let qb = db.from('clientes_resumen').select('*', { count: 'exact' });
+  const t = limpiar(q || '');
+  if (t) qb = qb.or(['nombre', 'apellido', 'telefono', 'email'].map((c) => `${c}.ilike.%${t}%`).join(','));
+  if (frecuentes) qb = qb.gte('reservas_total', 5);
+  if (orden === 'nombre') qb = qb.order('nombre');
+  else if (orden === 'reservas') qb = qb.order('reservas_total', { ascending: false });
+  else if (orden === 'nuevos') qb = qb.order('created_at', { ascending: false });
+  else qb = qb.order('ultima_reserva', { ascending: false, nullsFirst: false });
+  const { data, count, error, status } = await qb.range(pagina * tam, pagina * tam + tam - 1);
+  lanzar(error, status); return { filas: data, total: count };
+}
+export async function obtenerCliente(id) {
+  const { data, error, status } = await db.from('clientes_resumen').select('*').eq('id', id).single(); lanzar(error, status); return data;
+}
+export async function reservasDeCliente(id) {
+  const { data, error, status } = await db.from('reservas').select('id, fecha, hora, estado, pago_estado, precio, canchas(nombre)').eq('cliente_id', id).order('fecha', { ascending: false }).order('hora', { ascending: false }).limit(30);
+  lanzar(error, status); return data;
+}
+export async function guardarCliente(c) {
+  const { error, status } = await db.rpc('admin_guardar_cliente', { p_id: c.id, p_nombre: c.nombre, p_apellido: c.apellido, p_telefono: c.telefono, p_email: c.email, p_notas: c.notas });
+  lanzar(error, status);
+}

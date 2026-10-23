@@ -41,7 +41,7 @@
   <div class="court-lines"></div>
   <div class="particles" id="particles"></div>
   <div class="hero-content">
-    <p class="hero-tag"><span class="pulse"></span> 4 canchas abiertas hoy</p>
+    <p class="hero-tag"><span class="pulse"></span> <span id="heroCanchas">4</span> canchas disponibles</p>
     <h1>Tu próximo partido<br>empieza acá.</h1>
     <p class="hero-sub">Canchas panorámicas e indoor en Paraná. Elegí día y horario, y listo.</p>
     <div class="hero-btns">
@@ -56,7 +56,7 @@
   <div class="wrap">
     <h2 class="reveal">Mucho más que una cancha.</h2>
     <div class="stats reveal">
-      <div><b data-count="4">0</b><small>canchas</small></div>
+      <div><b id="statCanchas" data-count="4">0</b><small>canchas</small></div>
       <div><b data-count="14">0</b><small>turnos por día</small></div>
       <div><b data-count="1200">0</b><small>jugadores</small></div>
     </div>
@@ -197,6 +197,7 @@
 <script src="js/config.js"></script>
 <script src="js/supabase.js"></script>
 <script src="js/extras.js"></script>
+<script src="js/canchas-db.js"></script>
 <script src="js/torneos-api.js"></script>
 <script src="js/profesores-api.js"></script>
 <script src="js/reservations.js"></script>

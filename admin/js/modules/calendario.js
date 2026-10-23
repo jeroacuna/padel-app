@@ -22,7 +22,7 @@ export async function render(el) {
       <div class="navs"><button class="btn ghost" data-n="-1" aria-label="Anterior">←</button><button class="btn ghost" data-n="0">Hoy</button><button class="btn ghost" data-n="1" aria-label="Siguiente">→</button></div>
       <input type="date" id="calFecha" value="${S.fecha}"><b id="calTitulo"></b>
     </div>
-    <div class="leyenda"><span><i class="e-confirmada"></i>Confirmada</span><span><i class="e-pendiente"></i>Pendiente</span><span><i class="e-completada"></i>Completada</span><span><i class="libre-pt"></i>Libre</span></div>
+    <div class="leyenda"><span><i class="e-confirmada"></i>Confirmada</span><span><i class="e-pendiente"></i>Pendiente</span><span><i class="e-completada"></i>Completada</span><span><i class="libre-pt"></i>Libre</span><span><i class="bloq-pt"></i>Bloqueada</span></div>
     <div id="calCuerpo"></div>`;
   const barra = el.querySelector('.cal-barra');
   barra.addEventListener('click', (e) => {
@@ -49,19 +49,24 @@ async function pintar() {
   cuerpo.innerHTML = '<p class="sub">Cargando calendario…</p>';
   try {
     const dia = S.vista === 'dia', desde = dia ? S.fecha : lunesDe(S.fecha), hasta = dia ? S.fecha : sumarDias(desde, 6);
-    const [res, canchas, hor] = await Promise.all([api.reservasRango(desde, hasta), api.canchas(), api.horario()]);
+    const [res, canchas, hor, bl] = await Promise.all([api.reservasRango(desde, hasta), api.canchas(), api.horario(), api.bloqueosRango(desde, hasta)]);
     const horas = Array.from({ length: hor.fin - hor.ini + 1 }, (_, i) => hor.ini + i);
-    cuerpo.innerHTML = dia ? vistaDia(res, canchas, horas) : vistaSemana(res, canchas, horas, desde);
+    cuerpo.innerHTML = dia ? vistaDia(res, canchas, horas, bl) : vistaSemana(res, canchas, horas, desde, bl);
   } catch (e) { console.error(e); cuerpo.innerHTML = `<p class="error-txt">No se pudo cargar el calendario: ${esc(e.message)}</p>`; }
 }
 
-function vistaDia(res, canchas, horas) {
+const TIPO_B = { lluvia: 'Lluvia', mantenimiento: 'Mantenim.', evento: 'Evento', otro: 'Bloqueada' };
+const bloqueo = (bl, f, h, c) => bl.find((b) => f >= b.fecha_desde && f <= b.fecha_hasta && h >= b.hora_ini && h <= b.hora_fin && (b.cancha_id == null || b.cancha_id === c));
+
+function vistaDia(res, canchas, horas, bl) {
   const hoy = hoyAR(), ahora = horaAR(), cols = canchas.filter((c) => c.activa || res.some((r) => r.cancha_id === c.id));
   const mapa = new Map(res.map((r) => [`${r.hora}-${r.cancha_id}`, r]));
   if (!cols.length) return '<div class="glass vacio"><h2>No hay canchas activas</h2></div>';
   const celda = (h, c) => {
     const r = mapa.get(`${h}-${c.id}`);
     if (r) return `<td><button class="res e-${esc(r.estado)}" data-id="${esc(r.id)}"><b>${esc(r.nombre)} ${esc(r.apellido)}</b><small>${esc(ESTADO[r.estado] || r.estado)}</small></button></td>`;
+    const b = bloqueo(bl, S.fecha, h, c.id);
+    if (b) return `<td class="bloq" title="${esc(b.motivo || '')}"><span>🔒 ${TIPO_B[b.tipo] || 'Bloqueada'}</span></td>`;
     const pasado = S.fecha < hoy || (S.fecha === hoy && h < ahora);
     return pasado || !c.activa ? '<td class="pasado">—</td>' : `<td><button class="libre" data-libre data-h="${h}" data-c="${c.id}" aria-label="Reservar ${hh(h)} en ${esc(c.nombre)}">+</button></td>`;
   };
@@ -69,12 +74,13 @@ function vistaDia(res, canchas, horas) {
     <tbody>${horas.map((h) => `<tr class="${S.fecha === hoy && h === ahora ? 'ahora' : ''}"><th>${hh(h)}</th>${cols.map((c) => celda(h, c)).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 
-function vistaSemana(res, canchas, horas, lunes) {
-  const hoy = hoyAR(), activas = canchas.filter((c) => c.activa).length || 1, dias = Array.from({ length: 7 }, (_, i) => sumarDias(lunes, i));
-  const cuenta = new Map(); res.forEach((r) => cuenta.set(`${r.fecha}-${r.hora}`, (cuenta.get(`${r.fecha}-${r.hora}`) || 0) + 1));
+function vistaSemana(res, canchas, horas, lunes, bl) {
+  const hoy = hoyAR(), act = canchas.filter((c) => c.activa), activas = act.length || 1, dias = Array.from({ length: 7 }, (_, i) => sumarDias(lunes, i));
+  const reservado = new Set(res.map((r) => `${r.fecha}-${r.hora}-${r.cancha_id}`));
+  const ocupadas = (f, h) => act.filter((c) => reservado.has(`${f}-${h}-${c.id}`) || bloqueo(bl, f, h, c.id)).length; // reservadas o bloqueadas
   const total = (f) => res.filter((r) => r.fecha === f).length;
-  const celda = (f, h) => { const n = cuenta.get(`${f}-${h}`) || 0, k = n === 0 ? 'vacio' : n >= activas ? 'lleno' : 'parcial'; return `<td><button class="sem ${k}" data-f="${f}" aria-label="${n} de ${activas} canchas ocupadas">${n ? `${n}/${activas}` : ''}</button></td>`; };
+  const celda = (f, h) => { const n = ocupadas(f, h), k = n === 0 ? 'vacio' : n >= activas ? 'lleno' : 'parcial'; return `<td><button class="sem ${k}" data-f="${f}" aria-label="${n} de ${activas} canchas ocupadas">${n ? `${n}/${activas}` : ''}</button></td>`; };
   return `<div class="cal-wrap glass"><table class="cal-tabla semana"><thead><tr><th></th>${dias.map((f) => `<th class="${f === hoy ? 'hoy' : ''}"><button class="dia-h" data-f="${f}">${DIAS[diaSem(f)]} ${+f.slice(8)}<small>${total(f)} reservas</small></button></th>`).join('')}</tr></thead>
     <tbody>${horas.map((h) => `<tr><th>${hh(h)}</th>${dias.map((f) => celda(f, h)).join('')}</tr>`).join('')}</tbody></table></div>
-    <p class="nota">Cada celda muestra cuántas canchas están ocupadas en ese horario. Tocá un día o una celda para verlo en detalle.</p>`;
+    <p class="nota">Cada celda muestra cuántas canchas están ocupadas (reservadas o bloqueadas) en ese horario. Tocá un día o una celda para verlo en detalle.</p>`;
 }

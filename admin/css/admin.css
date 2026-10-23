@@ -118,3 +118,15 @@ h1{font-size:clamp(2rem,5vw,3rem)}h2{font-size:1.4rem;margin-bottom:.8rem}
 .bloque{display:grid;gap:.25rem;margin-top:.8rem;font-size:.78rem;color:var(--muted)}
 .form-grid input,.form-grid select{width:100%}
 @media(max-width:560px){.cal-barra{gap:.6rem}.cal-tabla td{min-width:104px}}
+
+/* ===== Fase 3: canchas, bloqueos, clientes ===== */
+.tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.cancha-card{padding:1.3rem;display:grid;gap:.6rem}.cancha-card h3{margin:0;font-size:1.4rem}.cancha-card p{color:var(--muted)}
+.cancha-card.inactiva{opacity:.65}.cancha-card .precio{font:italic 800 2rem/1 var(--font-d);color:var(--lime)}.precio small{display:block;font:500 .72rem var(--font-b);color:var(--muted)}
+.prox{font-size:.85rem;margin-left:.4rem}
+.b-activa{background:rgba(198,244,50,.2);color:var(--lime)}.b-inactiva{background:rgba(255,255,255,.12);color:var(--muted)}.b-frecuente{background:var(--lime);color:var(--navy)}
+.b-t-lluvia{background:rgba(37,99,255,.5)}.b-t-mantenimiento{background:#f59e0b;color:var(--navy)}.b-t-evento{background:rgba(198,244,50,.25);color:var(--lime)}.b-t-otro{background:rgba(255,255,255,.14)}
+.check{display:flex!important;align-items:center;gap:.5rem;font-size:.9rem!important;color:#fff!important;min-height:42px}.check input{width:auto!important;min-height:0!important}
+.toast.aviso{background:#f59e0b;color:var(--navy)}
+td.bloq{background:repeating-linear-gradient(45deg,rgba(255,255,255,.05),rgba(255,255,255,.05) 6px,transparent 6px,transparent 12px);text-align:center;color:var(--muted);font-size:.78rem}
+.bloq-pt{background:repeating-linear-gradient(45deg,rgba(255,255,255,.35),rgba(255,255,255,.35) 3px,transparent 3px,transparent 6px)}

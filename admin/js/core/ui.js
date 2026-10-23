@@ -19,7 +19,7 @@ export function toast(msg, tipo = 'ok') {
   let c = document.getElementById('toasts');
   if (!c) { c = document.createElement('div'); c.id = 'toasts'; c.setAttribute('aria-live', 'polite'); document.body.append(c); }
   const t = document.createElement('div'); t.className = `toast ${tipo}`; t.textContent = msg; c.append(t);
-  setTimeout(() => t.remove(), tipo === 'error' ? 6000 : 3200);
+  setTimeout(() => t.remove(), tipo === 'ok' ? 3200 : 7000);
 }
 
 export function abrirModal(html) {

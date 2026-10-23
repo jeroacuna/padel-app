@@ -8,6 +8,7 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function render() {
   document.querySelectorAll('[data-cfg]').forEach(el => el.textContent = CONFIG[el.dataset.cfg]);
   $('#year').textContent = new Date().getFullYear();
+  $('#heroCanchas').textContent = CANCHAS.length; $('#statCanchas').dataset.count = CANCHAS.length;
   $('#heroBg').style.cssText = bg(IMAGES.hero);
   $('#amenidades').innerHTML = AMENIDADES.map(a => card(...a)).join('');
   $('#serviciosGrid').innerHTML = SERVICIOS.map(a => card(...a)).join('');
@@ -103,7 +104,9 @@ function interacciones() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // las canchas salen de la base (con tope de 2,5 s para no demorar la página si hay mala conexión)
+  try { await Promise.race([cargarCanchasDB(), new Promise((r) => setTimeout(r, 2500))]); } catch (e) { console.error(e); }
   render(); lucide.createIcons(); efectos(); interacciones(); Reserva.init();
 });
 addEventListener('load', () => setTimeout(() => $('#loader').classList.add('done'), 700));
