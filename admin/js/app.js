@@ -1,5 +1,5 @@
 import { disponible, obtenerPerfil, cerrarSesion } from './core/auth.js';
-import { esc } from './core/ui.js';
+import { esc, sesion } from './core/ui.js';
 
 // Módulos del panel. "fase" = cuándo se habilita; sin fase = ya funciona.
 const RUTAS = {
@@ -8,7 +8,8 @@ const RUTAS = {
   calendario:    { t: 'Calendario',    i: 'calendar-days',  mod: 'calendario' },
   canchas:       { t: 'Canchas',       i: 'layers',         mod: 'canchas' },
   clientes:      { t: 'Clientes',      i: 'users',          mod: 'clientes' },
-  pagos:         { t: 'Pagos',         i: 'wallet',         fase: 4, d: 'Señas, pagos parciales, saldos e ingresos por día, semana y mes.' },
+  pagos:         { t: 'Pagos',         i: 'wallet',         mod: 'pagos' },
+  estadisticas:  { t: 'Estadísticas',  i: 'trending-up',    mod: 'estadisticas' },
   torneos:       { t: 'Torneos',       i: 'trophy',         fase: 5, d: 'Crear y publicar torneos, inscriptos y estados de pago.' },
   profesores:    { t: 'Profesores',    i: 'graduation-cap', fase: 5, d: 'Profesores, disponibilidad y clases reservadas.' },
   configuracion: { t: 'Configuración', i: 'settings',       fase: 5, d: 'Datos del complejo, horarios de atención y avisos.' },
@@ -49,6 +50,7 @@ async function ir() {
   if (!disponible()) return fallo('No hay conexión con el servidor o la web está en modo demo.');
   try { perfil = await obtenerPerfil(); } catch (e) { return fallo(e.message); }
   if (!perfil) return location.replace('/admin/index.html'); // sin sesión o sin permisos: afuera
+  sesion.rol = perfil.rol;
   pintarShell();
   window.addEventListener('hashchange', ir);
   db.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') location.replace('/admin/index.html'); });

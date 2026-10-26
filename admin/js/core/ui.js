@@ -32,3 +32,10 @@ export function abrirModal(html) {
   velo.addEventListener('click', (e) => { if (e.target === velo || e.target.closest('.modal-x')) cerrar(); });
   return { el: velo.querySelector('.modal-cuerpo'), cerrar };
 }
+
+export const sesion = { rol: 'staff' }; // se completa al entrar al panel; la base igual valida los permisos
+
+export function barras(items, formato = (v) => v) { // gráfico de barras simple: items = [{ etiqueta, valor }]
+  const max = Math.max(1, ...items.map((i) => i.valor));
+  return `<ul class="barras">${items.map((i) => `<li><span class="b-et">${esc(i.etiqueta)}</span><span class="b-pista"><i style="width:${Math.max(0, Math.round((i.valor / max) * 100))}%"></i></span><span class="b-val">${esc(formato(i.valor))}</span></li>`).join('')}</ul>`;
+}

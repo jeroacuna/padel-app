@@ -123,3 +123,30 @@ export async function guardarCliente(c) {
   const { error, status } = await db.rpc('admin_guardar_cliente', { p_id: c.id, p_nombre: c.nombre, p_apellido: c.apellido, p_telefono: c.telefono, p_email: c.email, p_notas: c.notas });
   lanzar(error, status);
 }
+
+/* ---------- Fase 4: pagos y estadísticas ---------- */
+export async function pagosDeReserva(id) {
+  const { data, error, status } = await db.from('pagos').select('id, tipo, monto, metodo, referencia, quien, anulado, anulado_motivo, created_at').eq('reserva_id', id).order('created_at');
+  lanzar(error, status); return data;
+}
+export async function registrarPago(d) { // devuelve { cobrado, saldo, pago_estado }
+  const { data, error, status } = await db.rpc('admin_registrar_pago', { p_reserva: d.reserva, p_monto: d.monto, p_metodo: d.metodo, p_tipo: d.tipo, p_referencia: d.referencia || null, p_nota: d.nota || null });
+  lanzar(error, status); return data;
+}
+export async function anularPago(id, motivo) { const { error, status } = await db.rpc('admin_anular_pago', { p_pago: id, p_motivo: motivo }); lanzar(error, status); }
+export async function resumenFinanzas(desde, hasta) { const { data, error, status } = await db.rpc('admin_resumen_finanzas', { p_desde: desde, p_hasta: hasta }); lanzar(error, status); return data; }
+export async function estadisticas(desde, hasta) { const { data, error, status } = await db.rpc('admin_estadisticas', { p_desde: desde, p_hasta: hasta }); lanzar(error, status); return data; }
+export async function movimientos({ desde, hasta, pagina = 0, tam = 20 }) {
+  const { data, count, error, status } = await db.from('pagos').select('id, tipo, monto, metodo, referencia, fecha, anulado, quien, reservas(codigo, nombre, apellido)', { count: 'exact' })
+    .gte('fecha', desde).lte('fecha', hasta).order('created_at', { ascending: false }).range(pagina * tam, pagina * tam + tam - 1);
+  lanzar(error, status); return { filas: data, total: count };
+}
+export async function impagas(hoy, pagina = 0, tam = 20) { // reservas de hoy o anteriores con saldo pendiente
+  const { data, count, error, status } = await db.from('reservas_saldo').select('*', { count: 'exact' }).neq('estado', 'cancelada').gt('saldo', 0).lte('fecha', hoy)
+    .order('fecha').order('hora').range(pagina * tam, pagina * tam + tam - 1);
+  lanzar(error, status); return { filas: data, total: count };
+}
+export async function resumenFinancieroDashboard(hoy, desdeMes, hastaMes) {
+  const [dia, mes, imp] = await Promise.all([resumenFinanzas(hoy, hoy), resumenFinanzas(desdeMes, hastaMes), impagas(hoy, 0, 1)]);
+  return { dia, mes, impagas: imp.total };
+}

@@ -1,44 +1,43 @@
-# Roadmap · Padel Arena
+import { esc, hoyAR, sumarDias, barras } from '../core/ui.js';
+import * as api from '../core/api.js';
 
-Estado: ✅ hecho · 🔄 en curso · ⬜ pendiente
+const DIAS = [[1, 'Lunes'], [2, 'Martes'], [3, 'Miércoles'], [4, 'Jueves'], [5, 'Viernes'], [6, 'Sábado'], [0, 'Domingo']];
+let periodo = '30';
 
-## Fase 0 · Auditoría ✅
-## Fase 1 · Base administrativa ✅
-- ✅ 1A: migraciones 001 y 002, modo demo separado de producción, validaciones y permisos mínimos
-- ✅ 1B: `/admin/` con login (Supabase Auth), sesión, rutas protegidas, sidebar responsive
+function rango() {
+  const hoy = hoyAR();
+  if (periodo === 'mes') { const [y, m] = hoy.split('-').map(Number); return [`${hoy.slice(0, 8)}01`, `${hoy.slice(0, 8)}${new Date(Date.UTC(y, m, 0)).getUTCDate()}`]; }
+  return [sumarDias(hoy, -(+periodo - 1)), hoy];
+}
 
-## Fase 2 · Reservas
-### 2A · Ver y gestionar ✅
-- ✅ Migración 003: lectura de reservas solo para admins, cambio de estado, reprogramación y registro de cambios (auditoría)
-- ✅ Dashboard con datos reales: reservas de hoy y de la semana, ocupación, próximos turnos, cancelaciones recientes
-- ✅ Listado de reservas con filtros (fechas, cancha, estado, búsqueda), orden y paginación
-- ✅ Detalle de reserva: confirmar, completar, cancelar (con motivo), reactivar, reprogramar e historial
-- 🔄 Correr 003 en Supabase y probar con reservas reales
-### 2B · Calendario y reservas manuales ✅
-- ✅ Migración 004: alta manual de reservas (WhatsApp, teléfono, presencial) con validaciones y registro de cambios
-- ✅ Calendario diario (canchas en columnas, horarios en filas) y semanal (ocupación por franja)
-- ✅ Tocar un hueco libre abre el alta manual con cancha, fecha y hora ya elegidas; tocar una reserva abre su detalle
-- 🔄 Correr 003 y 004 en Supabase y probar con reservas reales
-- ⬜ Ingresos y pagos pendientes en el dashboard (se completan en la Fase 4)
+export async function render(el) {
+  el.innerHTML = `<div class="enc"><div><h1>Estadísticas</h1><p class="sub">Cómo se está usando el complejo</p></div>
+    <label class="filtros-mini">Período<select id="per"><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="90">Últimos 90 días</option><option value="mes">Este mes</option></select></label></div>
+    <div id="estCuerpo"><p class="sub">Cargando…</p></div>`;
+  const sel = el.querySelector('#per'); sel.value = periodo; sel.onchange = () => { periodo = sel.value; cargar(); };
+  cargar();
+}
 
-## Fase 3 · Canchas y clientes 🔄
-- ✅ Migración 005: administrar canchas (nunca se borran), bloqueos (lluvia, mantenimiento, eventos) que respetan la web y el panel, clientes sin duplicados con historial
-- ✅ Canchas: crear, editar nombre/tipo/precio, activar o desactivar con aviso de reservas próximas
-- ✅ Bloqueos por cancha o para todas, por fechas y horas, con botón "Cerrar hoy por lluvia"; el calendario los muestra
-- ✅ Clientes: búsqueda, frecuentes, historial de reservas, notas administrativas y edición de datos
-- ✅ La web pública toma nombre, precio y estado de las canchas desde la base
-- 🔄 Correr 003, 004 y 005 en Supabase y probar con datos reales
-## Fase 4 · Pagos y estadísticas ⬜
-## Fase 5 · Torneos, profesores y configuración ⬜
-## Fase 6 · Experiencia del jugador ⬜
-Consulta de reserva por código, solicitud de cancelación, emails, SEO (`TU-DOMINIO`), cifras y testimonios reales.
-## Fase 7 · Calidad y entrega ⬜
-Pruebas, accesibilidad, despliegue, documentación técnica y de usuario, demo para la PP.
-
-## Etapa posterior
-Reservas fijas · lista de espera · promociones · estadísticas avanzadas · notificaciones · ranking.
-
-## Decisiones pendientes
-- Estado inicial de una reserva web: hoy `confirmada`. ¿Pasa a `pendiente` con vencimiento?
-- Reglas de cancelación para jugadores (Fase 6)
-- Permisos distintos para `owner` y `staff` (hoy pueden hacer lo mismo)
+async function cargar() {
+  const c = document.getElementById('estCuerpo'); if (!c) return;
+  c.innerHTML = '<p class="sub">Cargando…</p>';
+  try {
+    const [desde, hasta] = rango();
+    const [d, hor] = await Promise.all([api.estadisticas(desde, hasta), api.horario()]);
+    if (!d.reservas && !d.canceladas) { c.innerHTML = '<div class="glass vacio"><h2>Todavía no hay datos</h2><p>No hay reservas en este período.</p></div>'; return; }
+    const porHora = new Map(d.por_hora.map((x) => [x.hora, x.reservas])), porDia = new Map(d.por_dia_semana.map((x) => [x.dia, x.reservas]));
+    const horas = Array.from({ length: hor.fin - hor.ini + 1 }, (_, i) => hor.ini + i);
+    c.innerHTML = `
+      <section class="stats">
+        <article class="stat glass"><span>Reservas</span><b>${d.reservas}</b></article>
+        <article class="stat glass"><span>Ocupación</span><b>${d.ocupacion}%</b></article>
+        <article class="stat glass"><span>Canceladas</span><b>${d.canceladas}</b></article>
+        <article class="stat glass"><span>Tasa de cancelación</span><b>${d.tasa_cancelacion}%</b></article></section>
+      <p class="nota" style="margin:0 0 1rem">Ocupación = turnos reservados sobre los turnos posibles (canchas activas × horario × días del período). No descuenta los bloqueos.</p>
+      <section class="cards">
+        <article class="card glass"><h2>Horarios más pedidos</h2>${barras(horas.map((h) => ({ etiqueta: `${String(h).padStart(2, '0')}:00`, valor: porHora.get(h) || 0 })))}</article>
+        <article class="card glass"><h2>Días de la semana</h2>${barras(DIAS.map(([n, t]) => ({ etiqueta: t, valor: porDia.get(n) || 0 })))}</article>
+        <article class="card glass" style="grid-column:1/-1"><h2>Uso por cancha</h2>${d.por_cancha.length ? barras(d.por_cancha.map((x) => ({ etiqueta: x.cancha, valor: x.reservas })), (v) => `${v} reservas`) : '<p class="vacio-txt">Sin reservas.</p>'}
+          <p class="nota">${d.por_cancha.map((x) => `${esc(x.cancha)}: ${x.ocupacion}% de ocupación`).join(' · ')}</p></article></section>`;
+  } catch (e) { console.error(e); c.innerHTML = `<p class="error-txt">No se pudieron cargar las estadísticas: ${esc(e.message)}</p>`; }
+}
