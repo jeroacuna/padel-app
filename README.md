@@ -9,7 +9,7 @@ Proyecto final de Práctica Profesionalizante (carrera Full Stack).
 ```
 index.html, torneos.html, profesores.html   páginas públicas
 css/  js/  assets/                          estilos, lógica y recursos
-supabase/migrations/                        001, 002, 003...: estructura de la base (correr en orden, una vez cada una)
+supabase/migrations/                        estructura de la base (correr en orden, una vez cada una)
 supabase/functions/enviar-email/            Edge Function de emails (Resend)
 supabase/seed_demo.sql                      datos de ejemplo (opcional)
 supabase/verificar.sql                      consultas para comprobar la base
@@ -21,7 +21,7 @@ ROADMAP.md                                  avance del proyecto
 
 ## Puesta en marcha
 1. Abrir con un servidor local (Live Server de VS Code).
-2. Crear un proyecto en Supabase, correr `001` y luego `002` en el SQL Editor.
+2. Crear un proyecto en Supabase y correr las migraciones de `supabase/migrations/` en orden, en el SQL Editor.
 3. Pegar la URL y la clave **pública** (publishable/anon) en `js/supabase.js`. Nunca la `service_role` ni la `secret`.
 4. Opcional: correr `seed_demo.sql` para tener datos de ejemplo.
 
@@ -35,9 +35,16 @@ ROADMAP.md                                  avance del proyecto
 - Primer administrador: crear el usuario en Supabase (Authentication → Users) y correr `supabase/crear_admin.sql`.
 - Recomendado: desactivar el registro público en Authentication ("Allow new users to sign up").
 - El panel no funciona en modo demo ni sin conexión.
-- Hoy permite: ver el dashboard, listar y filtrar reservas, y cambiar estado o reprogramar (todo queda en el historial).
+- Permite gestionar: dashboard, reservas, calendario, canchas y bloqueos, clientes, pagos y estadísticas, torneos e inscripciones,
+  profesores y clases, avisos y el horario de atención. Todo cambio queda en el historial (auditoría).
+- Roles: el **propietario** (`owner`) puede además anular pagos y cambiar el horario de atención; el **staff** gestiona el día a día.
+
+## Qué se edita desde dónde
+- Desde el **panel**: canchas y precios, bloqueos, reservas, clientes, pagos, torneos, profesores, avisos y horario de atención.
+- Desde **`js/config.js`**: datos del complejo (teléfono, dirección, Instagram, WhatsApp), fotos, textos de servicios y testimonios.
 
 ## Seguridad (resumen)
 - Las tablas con datos personales (`reservas`, `inscripciones`, `clases`) tienen RLS y **ningún acceso directo** para visitantes.
 - El navegador solo puede usar funciones concretas (`crear_reserva`, `inscribir`, ...) que validan todo en el servidor.
 - Precio, horarios, fechas pasadas y datos de contacto se validan en la base, no en el navegador.
+- El panel escribe siempre mediante funciones `admin_*` que comprueban el rol, validan los datos y registran quién hizo cada cambio.

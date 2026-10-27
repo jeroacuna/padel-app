@@ -8,7 +8,8 @@ const TorneosAPI = {
   async listar() {
     exigirDb();
     if (DEMO) return TORNEOS.map(t => ({ ...t, inscriptos: t.inscriptos + this._loc().filter(i => i.torneo_id === t.id).length }));
-    const { data, error } = await db.from('torneos_info').select('*').order('fecha');
+    // La vista solo trae torneos publicados; los finalizados no se muestran para que no aparezcan como "próximo torneo"
+    const { data, error } = await db.from('torneos_info').select('*').neq('estado', 'finalizado').order('fecha');
     if (error) throw error;
     return data;
   },

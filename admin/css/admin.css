@@ -1238,6 +1238,50 @@ td.bloq {
 }
 
 /* =========================================
+   FASE 5: TORNEOS, PROFESORES, CONFIGURACIÓN
+   ========================================= */
+.b-abierto { background: rgba(198, 244, 50, 0.2); color: var(--lime); }
+.b-cerrado { background: #f59e0b; color: var(--navy); }
+.b-finalizado { background: rgba(255, 255, 255, 0.12); color: var(--muted); }
+.b-pagada { background: rgba(198, 244, 50, 0.2); color: var(--lime); }
+.b-urgente { background: rgba(239, 68, 68, 0.3); color: #fca5a5; }
+.b-info { background: rgba(37, 99, 255, 0.45); }
+.b-torneo { background: rgba(198, 244, 50, 0.2); color: var(--lime); }
+
+.form-grid .ancho { grid-column: 1 / -1; }
+
+.insc-lista {
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.insc-lista li {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.insc-lista small { color: var(--muted); line-height: 1.5; }
+
+.horarios-edit {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.horarios-edit label {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.tabla td .btn.chico + .btn.chico { margin-left: 0.3rem; }
+
+/* =========================================
    MEDIA QUERIES (ADAPTACIÓN A MÓVILES)
    ========================================= */
 @media(max-width: 860px) {
@@ -1294,4 +1338,5 @@ td.bloq {
   .cal-barra { gap: 0.6rem; }
   .cal-tabla td { min-width: 104px; }
   .barras li { grid-template-columns: 70px 1fr auto; }
+  .horarios-edit label { grid-template-columns: 1fr; gap: 0.2rem; }
 }

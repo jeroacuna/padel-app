@@ -10,9 +10,9 @@ const RUTAS = {
   clientes:      { t: 'Clientes',      i: 'users',          mod: 'clientes' },
   pagos:         { t: 'Pagos',         i: 'wallet',         mod: 'pagos' },
   estadisticas:  { t: 'Estadísticas',  i: 'trending-up',    mod: 'estadisticas' },
-  torneos:       { t: 'Torneos',       i: 'trophy',         fase: 5, d: 'Crear y publicar torneos, inscriptos y estados de pago.' },
-  profesores:    { t: 'Profesores',    i: 'graduation-cap', fase: 5, d: 'Profesores, disponibilidad y clases reservadas.' },
-  configuracion: { t: 'Configuración', i: 'settings',       fase: 5, d: 'Datos del complejo, horarios de atención y avisos.' },
+  torneos:       { t: 'Torneos',       i: 'trophy',         mod: 'torneos' },
+  profesores:    { t: 'Profesores',    i: 'graduation-cap', mod: 'profesores' },
+  configuracion: { t: 'Configuración', i: 'settings',       mod: 'configuracion' },
 };
 const $ = (id) => document.getElementById(id);
 let perfil = null;

@@ -150,3 +150,62 @@ export async function resumenFinancieroDashboard(hoy, desdeMes, hastaMes) {
   const [dia, mes, imp] = await Promise.all([resumenFinanzas(hoy, hoy), resumenFinanzas(desdeMes, hastaMes), impagas(hoy, 0, 1)]);
   return { dia, mes, impagas: imp.total };
 }
+
+/* ---------- Fase 5: torneos, profesores, avisos y configuración ---------- */
+export async function listarTorneos() {
+  const { data, error, status } = await db.from('torneos').select('*').order('fecha', { ascending: false }); lanzar(error, status); return data;
+}
+export async function resumenInscripciones() { // { torneo_id: { activas, pagadas } }
+  const { data, error, status } = await db.from('inscripciones').select('torneo_id, estado'); lanzar(error, status);
+  return data.reduce((m, i) => {
+    const x = (m[i.torneo_id] = m[i.torneo_id] || { activas: 0, pagadas: 0 });
+    if (i.estado !== 'cancelada') x.activas++;
+    if (i.estado === 'pagada') x.pagadas++;
+    return m;
+  }, {});
+}
+export async function inscripcionesTorneo(id) {
+  const { data, error, status } = await db.from('inscripciones').select('id, codigo, categoria, jugador1, jugador2, telefono, email, estado, created_at').eq('torneo_id', id).order('created_at');
+  lanzar(error, status); return data;
+}
+export async function guardarTorneo(t) { // devuelve el id del torneo
+  const { data, error, status } = await db.rpc('admin_guardar_torneo', {
+    p_id: t.id ?? null, p_titulo: t.titulo, p_fecha: t.fecha, p_hora: t.hora, p_lugar: t.lugar, p_categorias: t.categorias, p_precio: t.precio, p_cupos: t.cupos,
+    p_descripcion: t.descripcion || null, p_formato: t.formato || null, p_premios: t.premios, p_reglamento: t.reglamento, p_imagen: t.imagen || null,
+    p_estado: t.estado, p_publicado: t.publicado });
+  lanzar(error, status); return data;
+}
+export async function estadoInscripcion(id, estado) {
+  const { error, status } = await db.rpc('admin_estado_inscripcion', { p_id: id, p_estado: estado }); lanzar(error, status);
+}
+
+export async function listarProfesores() {
+  const { data, error, status } = await db.from('profesores').select('*').order('id'); lanzar(error, status); return data;
+}
+export async function guardarProfesor(p) { // devuelve { id, afectadas }
+  const { data, error, status } = await db.rpc('admin_guardar_profesor', {
+    p_id: p.id ?? null, p_nombre: p.nombre, p_especialidad: p.especialidad, p_bio: p.bio || null, p_precio: p.precio, p_duracion: p.duracion,
+    p_foto: p.foto || null, p_horarios: p.horarios, p_etiquetas: p.etiquetas, p_activo: p.activo });
+  lanzar(error, status); return data;
+}
+export async function clasesProximas(hoy) {
+  const { data, error, status } = await db.from('clases').select('id, codigo, fecha, hora, nombre, telefono, email, estado, profesores(nombre)')
+    .gte('fecha', hoy).order('fecha').order('hora').limit(200);
+  lanzar(error, status); return data;
+}
+export async function estadoClase(id, estado) {
+  const { error, status } = await db.rpc('admin_estado_clase', { p_id: id, p_estado: estado }); lanzar(error, status);
+}
+
+export async function listarAvisos() {
+  const { data, error, status } = await db.from('avisos').select('*').order('fecha', { ascending: false }).order('id', { ascending: false }); lanzar(error, status); return data;
+}
+export async function guardarAviso(a) {
+  const { data, error, status } = await db.rpc('admin_guardar_aviso', { p_id: a.id ?? null, p_tipo: a.tipo, p_titulo: a.titulo, p_texto: a.texto, p_enlace: a.enlace || null, p_activo: a.activo });
+  lanzar(error, status); return data;
+}
+export async function guardarConfig(ini, fin) { // devuelve { afectadas }
+  const { data, error, status } = await db.rpc('admin_guardar_config', { p_hora_ini: ini, p_hora_fin: fin }); lanzar(error, status);
+  _horario = undefined; // se borra la copia guardada para que el panel lea el horario nuevo
+  return data;
+}
