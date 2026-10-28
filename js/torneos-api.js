@@ -26,6 +26,7 @@ const TorneosAPI = {
     }
     const { data, error } = await db.rpc('inscribir', { p_torneo: t.id, p_categoria: d.categoria, p_j1: d.jugador1, p_j2: d.jugador2, p_tel: d.telefono, p_email: d.email });
     if (error) throw new Error(error.message);
+    db.functions.invoke('enviar-email', { body: { tipo: 'inscripcion', codigo: data } }).catch(() => {}); // aviso por email; no frena la inscripción si falla
     return data;
   }
 };

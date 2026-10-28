@@ -25,6 +25,7 @@ const ReservasAPI = {
       p_fecha: r.fecha, p_hora: r.hora, p_cancha: r.canchaId, p_nombre: r.nombre,
       p_apellido: r.apellido, p_telefono: r.telefono, p_email: r.email, p_precio: r.precio });
     if (error) throw new Error(error.message);
+    db.functions.invoke('enviar-email', { body: { tipo: 'reserva', codigo: data } }).catch(() => {}); // aviso por email; no frena la reserva si falla
     return { ...r, id: data };
   }
 };
@@ -139,6 +140,7 @@ const Reserva = {
     this.$('modalCard').innerHTML = `<i data-lucide="check-circle-2" class="ok-ico"></i><h3>¡Reserva confirmada!</h3>
       <p>Gracias ${r.nombre}, te esperamos.</p>
       <dl><dt>Código</dt><dd>${r.id}</dd><dt>Fecha</dt><dd>${r.fechaTxt}</dd><dt>Hora</dt><dd>${r.horaTxt}</dd><dt>Cancha</dt><dd>${r.cancha} · ${r.tipo}</dd><dt>Duración</dt><dd>${r.duracion}</dd><dt>Precio</dt><dd>${CONFIG.moneda}${r.precio.toLocaleString('es-AR')}</dd></dl>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Guardá tu código: con él (y tu email o teléfono) podés <a href="reserva.html?codigo=${r.id}" style="color:var(--lime);font-weight:700">consultar o cancelar tu reserva</a>.</p>
       <button class="btn btn-lime" id="cerrarModal">Listo</button>`;
     this.$('modal').classList.add('open'); lucide.createIcons();
     this.$('cerrarModal').onclick = () => this.$('modal').classList.remove('open');

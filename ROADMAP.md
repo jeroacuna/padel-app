@@ -12,10 +12,10 @@ Panel de administración y web pública de un complejo de pádel. Stack: HTML + 
 | 3 | Canchas, bloqueos (lluvia, mantenimiento, eventos), clientes sin duplicados | `canchas_clientes.sql` |
 | 4 | Pagos (cobros, reembolsos, anulaciones), finanzas y estadísticas | `pagos_estadisticas.sql` (006) |
 | 5 | Torneos e inscripciones, profesores y clases, avisos, horario de atención dinámico | `torneos_profesores_config.sql` (007) |
+| 6 | Consulta de reserva con código (`reserva.html`), cancelación por el cliente hasta 24 hs antes, emails de reservas, inscripciones y cancelaciones | `consulta_cancelacion.sql` (008) + Edge Function `enviar-email` |
 
 ## Pendiente
 
-- **Fase 6:** consulta de reserva con código, solicitud de cancelación por el cliente y emails (reservas e inscripciones, no solo clases).
 - **Fase 7:** pruebas, accesibilidad, SEO (reemplazar `TU-DOMINIO` en canonical, og:url, JSON-LD, sitemap), despliegue y documentación.
 
 ## Después del núcleo

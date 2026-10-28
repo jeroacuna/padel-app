@@ -8,6 +8,7 @@ Proyecto final de Práctica Profesionalizante (carrera Full Stack).
 ## Estructura
 ```
 index.html, torneos.html, profesores.html   páginas públicas
+reserva.html                                consulta y cancelación de una reserva con código
 css/  js/  assets/                          estilos, lógica y recursos
 supabase/migrations/                        estructura de la base (correr en orden, una vez cada una)
 supabase/functions/enviar-email/            Edge Function de emails (Resend)
@@ -43,8 +44,16 @@ ROADMAP.md                                  avance del proyecto
 - Desde el **panel**: canchas y precios, bloqueos, reservas, clientes, pagos, torneos, profesores, avisos y horario de atención.
 - Desde **`js/config.js`**: datos del complejo (teléfono, dirección, Instagram, WhatsApp), fotos, textos de servicios y testimonios.
 
+## Emails (Edge Function `enviar-email`)
+- Avisa al dueño cuando hay una reserva, una inscripción a torneo, una clase o una cancelación del cliente.
+- Desplegar: `supabase functions deploy enviar-email`. Secrets: `RESEND_API_KEY`, `MAIL_DESTINO` (obligatorios), `MAIL_FROM`, `LOGO_URL`,
+  `PUBLIC_URL` (link "Ver o cancelar mi reserva"), `PAGO_ALIAS`, `PAGO_TITULAR` (opcionales).
+- Confirmación al cliente: poner `ENVIAR_A_CLIENTES=true`. Requiere un dominio verificado en Resend (con `onboarding@resend.dev` solo llega a tu propio mail).
+- Plazo de cancelación: `config_complejo.horas_cancelacion` (24 por defecto).
+
 ## Seguridad (resumen)
 - Las tablas con datos personales (`reservas`, `inscripciones`, `clases`) tienen RLS y **ningún acceso directo** para visitantes.
-- El navegador solo puede usar funciones concretas (`crear_reserva`, `inscribir`, ...) que validan todo en el servidor.
+- El navegador solo puede usar funciones concretas (`crear_reserva`, `inscribir`, `consultar_reserva`, `cancelar_reserva_cliente`, ...) que validan todo en el servidor.
+- La consulta de reservas exige código + email o teléfono, y se bloquea tras 8 intentos fallidos en 15 minutos.
 - Precio, horarios, fechas pasadas y datos de contacto se validan en la base, no en el navegador.
 - El panel escribe siempre mediante funciones `admin_*` que comprueban el rol, validan los datos y registran quién hizo cada cambio.
