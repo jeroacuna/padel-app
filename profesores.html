@@ -6,33 +6,39 @@
 <title>Profesores de pádel | Padel Arena Paraná</title>
 <meta name="description" content="Clases de pádel en Paraná con profesores de Padel Arena. Mirá sus horarios y reservá tu clase online.">
 <meta name="theme-color" content="#07122e">
-<link rel="canonical" href="https://TU-DOMINIO.com/profesores.html">
+<link rel="canonical" href="https://padel-app-eight-tau.vercel.app/profesores.html">
 <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Profesores de pádel | Padel Arena">
 <meta property="og:description" content="Reservá clases de pádel con nuestros profesores.">
-<meta property="og:image" content="https://TU-DOMINIO.com/assets/images/og.jpg">
+<meta property="og:url" content="https://padel-app-eight-tau.vercel.app/profesores.html">
+<meta property="og:image" content="https://padel-app-eight-tau.vercel.app/assets/images/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/a11y.css">
 </head>
 <body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
 <header id="navbar" class="scrolled">
   <a href="index.html" class="logo"><img src="assets/icons/logo.svg" alt="" width="34" height="34"><span data-cfg="nombre"></span></a>
-  <nav id="menu">
+  <nav id="menu" aria-label="Principal">
     <a href="index.html#complejo">El complejo</a><a href="index.html#canchas">Canchas</a><a href="index.html#galeria">Galería</a>
-    <a href="index.html#servicios">Servicios</a><a href="torneos.html">Torneos</a><a href="profesores.html">Profesores</a><a href="index.html#contacto">Contacto</a>
+    <a href="index.html#servicios">Servicios</a><a href="torneos.html">Torneos</a><a href="profesores.html" aria-current="page">Profesores</a><a href="index.html#contacto">Contacto</a>
   </nav>
   <a href="index.html#reservas" class="btn btn-lime">Reservar cancha</a>
   <button id="burger" aria-label="Abrir menú"><span></span><span></span></button>
 </header>
 
-<main class="sec page-top"><div class="wrap" id="app"><p>Cargando profesores…</p></div></main>
+<main id="contenido" tabindex="-1" class="sec page-top"><div class="wrap" id="app"><p>Cargando profesores…</p></div></main>
 
 <footer><p class="copy" style="border:0;margin:0">© <span id="year"></span> <span data-cfg="nombre"></span>. Todos los derechos reservados.</p></footer>
 
-<div class="modal" id="modal"><div class="modal-card glass" id="modalCard"></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Confirmación de clase"><div class="modal-card glass" id="modalCard"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

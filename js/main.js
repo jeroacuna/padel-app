@@ -95,7 +95,10 @@ function interacciones() {
   let i = 0; const slides = [...document.querySelectorAll('.slide')], dots = [...$('#sliderDots').children];
   const ir = n => { i = (n + slides.length) % slides.length; slides.forEach((s, k) => s.classList.toggle('on', k === i)); dots.forEach((d, k) => d.classList.toggle('on', k === i)); };
   dots.forEach((d, k) => d.onclick = () => ir(k));
-  setInterval(() => ir(i + 1), 6000);
+  const sl = $('#slider'); let pausa = false;
+  ['mouseenter', 'focusin'].forEach(ev => sl.addEventListener(ev, () => pausa = true));
+  ['mouseleave', 'focusout'].forEach(ev => sl.addEventListener(ev, () => pausa = false));
+  if (!reduce) setInterval(() => { if (!pausa) ir(i + 1); }, 6000); // con "reducir movimiento" no rota solo
 
   $('#formContacto').addEventListener('submit', e => {
     e.preventDefault();
@@ -110,4 +113,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   try { await Promise.race([cargarCanchasDB(), new Promise((r) => setTimeout(r, 2500))]); } catch (e) { console.error(e); }
   render(); lucide.createIcons(); efectos(); interacciones(); Reserva.init();
 });
-addEventListener('load', () => setTimeout(() => $('#loader').classList.add('done'), 700));
+addEventListener('load', () => setTimeout(() => $('#loader').classList.add('done'), 700));  

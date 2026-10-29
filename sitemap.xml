@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://TU-DOMINIO.com/</loc></url>
-<url><loc>https://TU-DOMINIO.com/torneos.html</loc></url>
-<url><loc>https://TU-DOMINIO.com/profesores.html</loc></url>
+<url><loc>https://ppadel-app.vercel.app/</loc></url>
+<url><loc>https://ppadel-app.vercel.app/admin/app.html/torneos</loc></url>
+<url><loc>https://ppadel-app.vercel.app/admin/app.html/profesores </loc></url>
 </urlset>

@@ -1,4 +1,14 @@
-
+// Edge Function: avisa por email cuando pasa algo importante (clase reservada, reserva de cancha, inscripción a torneo o cancelación).
+// La web solo manda el TIPO y el CÓDIGO; los datos y el destinatario salen de la base y de los secrets,
+// así nadie puede usar esta función para mandar mails a cualquiera.
+//
+// Secrets:
+//   RESEND_API_KEY, MAIL_DESTINO (obligatorios)   MAIL_FROM, LOGO_URL (opcionales)
+//   PUBLIC_URL          ej. https://padel-app-eight-tau.vercel.app  (para el link "Ver o cancelar mi reserva")
+//   ENVIAR_A_CLIENTES   'true' para mandar también una confirmación al cliente.
+//                       Solo funciona con un dominio verificado en Resend: con onboarding@resend.dev, Resend solo entrega a tu propio mail.
+//   PAGO_ALIAS, PAGO_TITULAR (opcionales: se muestran en el mail de inscripción)
+// @ts-nocheck
 const SB = Deno.env.get('SUPABASE_URL')!;
 const SERVICE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const RESEND = Deno.env.get('RESEND_API_KEY')!;

@@ -17,6 +17,8 @@ supabase/verificar.sql                      consultas para comprobar la base
 supabase/crear_admin.sql                    crea el primer administrador
 admin/                                      panel de administración (login, layout, módulos)
 supabase/legacy/                            scripts viejos (referencia, ya reemplazados por las migraciones)
+docs/                                       pruebas, despliegue, manual del panel y arquitectura
+vercel.json                                 cabeceras de seguridad (Vercel)
 ROADMAP.md                                  avance del proyecto
 ```
 
@@ -25,6 +27,12 @@ ROADMAP.md                                  avance del proyecto
 2. Crear un proyecto en Supabase y correr las migraciones de `supabase/migrations/` en orden, en el SQL Editor.
 3. Pegar la URL y la clave **pública** (publishable/anon) en `js/supabase.js`. Nunca la `service_role` ni la `secret`.
 4. Opcional: correr `seed_demo.sql` para tener datos de ejemplo.
+
+## Documentación
+- [`docs/ARQUITECTURA.md`](docs/ARQUITECTURA.md): cómo está armado y por qué (seguridad, modelo de datos, decisiones).
+- [`docs/DEPLOY.md`](docs/DEPLOY.md): puesta en producción en Supabase y Vercel, y checklist de salida.
+- [`docs/PRUEBAS.md`](docs/PRUEBAS.md): plan de pruebas manuales. `supabase/verificar.sql` comprueba la base.
+- [`docs/MANUAL_ADMIN.md`](docs/MANUAL_ADMIN.md): guía del panel para quien administra el complejo.
 
 ## Modos de la app
 - **Producción (por defecto):** usa Supabase. Si no hay conexión, la web lo avisa y **no guarda nada en el navegador**.
@@ -55,5 +63,6 @@ ROADMAP.md                                  avance del proyecto
 - Las tablas con datos personales (`reservas`, `inscripciones`, `clases`) tienen RLS y **ningún acceso directo** para visitantes.
 - El navegador solo puede usar funciones concretas (`crear_reserva`, `inscribir`, `consultar_reserva`, `cancelar_reserva_cliente`, ...) que validan todo en el servidor.
 - La consulta de reservas exige código + email o teléfono, y se bloquea tras 8 intentos fallidos en 15 minutos.
+- Una misma persona no puede tener más de 4 reservas próximas activas desde la web (`config_complejo.max_reservas_activas`).
 - Precio, horarios, fechas pasadas y datos de contacto se validan en la base, no en el navegador.
 - El panel escribe siempre mediante funciones `admin_*` que comprueban el rol, validan los datos y registran quién hizo cada cambio.

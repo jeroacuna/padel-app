@@ -23,9 +23,9 @@ function formulario(msg = '', codigo = '', contacto = '') {
   app.innerHTML = `<h2>Mi reserva</h2>
     <p class="sub">Ingresá el código que te dimos al reservar y el email o teléfono que usaste. Desde acá podés ver tu turno y cancelarlo.</p>
     <form class="caja glass" id="formConsulta" novalidate>
-      <input name="codigo" placeholder="Código de reserva (6 caracteres)" maxlength="6" autocomplete="off" autocapitalize="characters" value="${esc(codigo)}" required>
-      <input name="contacto" placeholder="Email o teléfono con el que reservaste" maxlength="120" autocomplete="email" value="${esc(contacto)}" required>
-      <p class="msg error" role="alert">${esc(msg)}</p>
+      <input name="codigo" aria-label="Código de reserva (6 caracteres)" placeholder="Código de reserva (6 caracteres)" maxlength="6" autocomplete="off" autocapitalize="characters" value="${esc(codigo)}" required>
+      <input name="contacto" aria-label="Email o teléfono con el que reservaste" placeholder="Email o teléfono con el que reservaste" maxlength="120" autocomplete="email" value="${esc(contacto)}" required>
+      <p class="msg error" role="alert" aria-live="assertive">${esc(msg)}</p>
       <button class="btn btn-lime" type="submit">Consultar</button>
     </form>
     <p class="sub" style="margin-top:1.2rem">¿Perdiste tu código? <a href="${wsp}" target="_blank" rel="noopener" style="color:var(--lime)">Escribinos por WhatsApp</a>.</p>`;
@@ -79,7 +79,7 @@ function pedirConfirmacion(r) { // paso de confirmación antes de una acción qu
   $('#zonaCancelar').innerHTML = `<div class="confirmar">
     <b>¿Seguro que querés cancelar?</b>
     <p class="sub" style="margin:.3rem 0 .6rem">El turno va a quedar libre para otras personas y no se puede deshacer.</p>
-    <textarea id="motivo" rows="2" maxlength="300" placeholder="Motivo (opcional)"></textarea>
+    <textarea id="motivo" rows="2" maxlength="300" aria-label="Motivo (opcional)" placeholder="Motivo (opcional)"></textarea>
     <div class="fila"><button class="btn btn-rojo" id="siCancelar">Sí, cancelar mi reserva</button><button class="btn btn-ghost" id="noCancelar">Volver</button></div>
     <p class="msg error" id="msgCancelar" role="alert"></p></div>`;
   $('#noCancelar').onclick = () => detalle(r);

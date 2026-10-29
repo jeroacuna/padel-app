@@ -68,7 +68,7 @@ const Reserva = {
     html += '<span></span>'.repeat(offset);
     for (let d = 1; d <= dias; d++) {
       const f = new Date(m.getFullYear(), m.getMonth(), d), s = this.fmt(f);
-      html += `<button data-fecha="${s}" class="${s === e.fecha ? 'sel' : ''}" ${f < hoy ? 'disabled' : ''}>${d}</button>`;
+      html += `<button data-fecha="${s}" class="${s === e.fecha ? 'sel' : ''}" aria-pressed="${s === e.fecha}" aria-label="${f.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}" ${f < hoy ? 'disabled' : ''}>${d}</button>`;
     }
     cal.innerHTML = html + '</div>';
   },

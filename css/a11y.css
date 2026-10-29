@@ -1,0 +1,36 @@
+/* Accesibilidad: ayudas para teclado y lectores de pantalla. Se carga después de style.css. */
+
+/* "Saltar al contenido": aparece solo al navegar con Tab, para no recorrer todo el menú en cada página */
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 200;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0 0 0.8rem 0;
+  background: var(--lime);
+  color: var(--navy);
+  font-weight: 800;
+}
+.skip:focus { left: 0; }
+
+/* Texto que solo leen los lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* El contenido principal recibe el foco al saltar, pero no queremos un recuadro gigante */
+main:focus { outline: none; }
+
+/* Zonas táctiles cómodas en celulares */
+@media (pointer: coarse) {
+  .btn, .slot, .court-opt, .day { min-height: 48px; }
+}

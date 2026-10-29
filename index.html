@@ -6,29 +6,31 @@
 <title>Padel Arena | Reservá canchas de pádel en Paraná</title>
 <meta name="description" content="Complejo de pádel en Paraná, Entre Ríos: canchas panorámicas e indoor, reservas online, clases y torneos. Reservá tu turno en un minuto.">
 <meta name="theme-color" content="#07122e">
-<link rel="canonical" href="https://TU-DOMINIO.com/">
+<link rel="canonical" href="https://padel-app-eight-tau.vercel.app/">
 <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Padel Arena | Reservá tu cancha de pádel en Paraná">
 <meta property="og:description" content="Canchas panorámicas e indoor, clases y torneos. Reservá online.">
-<meta property="og:url" content="https://TU-DOMINIO.com/">
-<meta property="og:image" content="https://TU-DOMINIO.com/assets/images/og.jpg">
+<meta property="og:url" content="https://padel-app-eight-tau.vercel.app/">
+<meta property="og:image" content="https://padel-app-eight-tau.vercel.app/assets/images/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Padel Arena","description":"Complejo de pádel con canchas panorámicas e indoor, clases y torneos.","url":"https://TU-DOMINIO.com/","telephone":"+54 9 343 695-8831","image":"https://TU-DOMINIO.com/assets/images/og.jpg","address":{"@type":"PostalAddress","streetAddress":"Smash Padel","addressLocality":"Paraná","addressRegion":"Entre Ríos","addressCountry":"AR"},"openingHours":"Mo-Su 09:00-23:00"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SportsActivityLocation","name":"Padel Arena","description":"Complejo de pádel con canchas panorámicas e indoor, clases y torneos.","url":"https://padel-app-eight-tau.vercel.app/","telephone":"+54 9 343 695-8831","image":"https://padel-app-eight-tau.vercel.app/assets/images/og.jpg","address":{"@type":"PostalAddress","streetAddress":"Smash Padel","addressLocality":"Paraná","addressRegion":"Entre Ríos","addressCountry":"AR"},"openingHours":"Mo-Su 09:00-23:00"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/a11y.css">
 </head>
 <body>
-<div id="loader"><div class="loader-logo">PADEL <span>ARENA</span></div><div class="loader-ball"></div></div>
-<div class="cursor" id="cursor"></div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div id="loader" aria-hidden="true"><div class="loader-logo">PADEL <span>ARENA</span></div><div class="loader-ball"></div></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <header id="navbar">
   <a href="#inicio" class="logo"><img src="assets/icons/logo.svg" alt="" width="34" height="34"><span data-cfg="nombre"></span></a>
-  <nav id="menu">
+  <nav id="menu" aria-label="Principal">
     <a href="#complejo">El complejo</a><a href="#canchas">Canchas</a><a href="#galeria">Galería</a>
     <a href="#servicios">Servicios</a><a href="torneos.html">Torneos</a><a href="profesores.html">Profesores</a><a href="#reservas">Reservas</a><a href="#contacto">Contacto</a>
   </nav>
@@ -36,6 +38,7 @@
   <button id="burger" aria-label="Abrir menú"><span></span><span></span></button>
 </header>
 
+<main id="contenido" tabindex="-1">
 <section id="inicio" class="hero">
   <div class="hero-bg" id="heroBg"></div>
   <div class="court-lines"></div>
@@ -135,10 +138,10 @@
             <button class="btn btn-lime" id="btnConfirmar" disabled>Confirmar reserva</button>
             <form id="formReserva" hidden>
               <h3>5. Tus datos</h3>
-              <input name="nombre" placeholder="Nombre" required autocomplete="given-name">
-              <input name="apellido" placeholder="Apellido" required autocomplete="family-name">
-              <input name="telefono" type="tel" placeholder="Teléfono" required autocomplete="tel">
-              <input name="email" type="email" placeholder="Email" required autocomplete="email">
+              <input name="nombre" aria-label="Nombre" placeholder="Nombre" required autocomplete="given-name">
+              <input name="apellido" aria-label="Apellido" placeholder="Apellido" required autocomplete="family-name">
+              <input name="telefono" type="tel" aria-label="Teléfono" placeholder="Teléfono" required autocomplete="tel">
+              <input name="email" type="email" aria-label="Email" placeholder="Email" required autocomplete="email">
               <button class="btn btn-lime" type="submit">Reservar ahora</button>
             </form>
           </div>
@@ -170,14 +173,15 @@
       </div>
       <form id="formContacto" class="glass contact">
         <h3>Escribinos</h3>
-        <input name="nombre" placeholder="Nombre" required>
-        <input name="email" type="email" placeholder="Email" required>
-        <textarea name="mensaje" rows="5" placeholder="Mensaje" required></textarea>
+        <input name="nombre" aria-label="Nombre" placeholder="Nombre" required>
+        <input name="email" type="email" aria-label="Email" placeholder="Email" required>
+        <textarea name="mensaje" rows="5" aria-label="Mensaje" placeholder="Mensaje" required></textarea>
         <button class="btn btn-lime" type="submit">Enviar por WhatsApp</button>
       </form>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap foot">
@@ -190,8 +194,8 @@
 </footer>
 
 <button id="toTop" aria-label="Volver arriba"><i data-lucide="arrow-up"></i></button>
-<div class="lightbox" id="lightbox"><button aria-label="Cerrar">×</button><div class="lb-img"></div></div>
-<div class="modal" id="modal"><div class="modal-card glass" id="modalCard"></div></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada"><button aria-label="Cerrar">×</button><div class="lb-img"></div></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Confirmación de reserva"><div class="modal-card glass" id="modalCard"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

@@ -35,19 +35,19 @@ function detalle(p) {
     <h3>Horarios semanales</h3><div class="week">${semana}</div>
   </div>
   <form class="t-form glass" id="formClase"><h3>Reservá tu clase</h3>
-    <small>1. Elegí el día</small>
-    <div class="days" id="days">${dias.map(d => `<button type="button" class="day" data-f="${f2(d)}"><small>${DIAS[d.getDay()]}</small><b>${d.getDate()}</b></button>`).join('')}</div>
-    <small>2. Elegí el horario</small>
-    <div class="slots" id="slotsP" style="margin:.6rem 0 1rem"><p class="mensaje-turnos">Primero elegí un día.</p></div>
-    <input name="nombre" placeholder="Nombre y apellido" required>
-    <input name="telefono" type="tel" placeholder="Teléfono" required>
-    <input name="email" type="email" placeholder="Email" required>
+    <small id="lblDia">1. Elegí el día</small>
+    <div class="days" id="days" role="group" aria-labelledby="lblDia">${dias.map(d => `<button type="button" class="day" data-f="${f2(d)}" aria-label="${d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}"><small>${DIAS[d.getDay()]}</small><b>${d.getDate()}</b></button>`).join('')}</div>
+    <small id="lblHora">2. Elegí el horario</small>
+    <div class="slots" id="slotsP" role="group" aria-labelledby="lblHora" aria-live="polite" style="margin:.6rem 0 1rem"><p class="mensaje-turnos">Primero elegí un día.</p></div>
+    <input name="nombre" placeholder="Nombre y apellido" aria-label="Nombre y apellido" autocomplete="name" required>
+    <input name="telefono" type="tel" placeholder="Teléfono" aria-label="Teléfono" autocomplete="tel" required>
+    <input name="email" type="email" placeholder="Email" aria-label="Email" autocomplete="email" required>
     <button class="btn btn-lime" type="submit" id="btnClase" disabled>Reservar clase · ${money(p.precio)}</button>
   </form></div>`;
 
   async function elegirDia(fecha) {
     sel.fecha = fecha; sel.hora = null; $('#btnClase').disabled = true;
-    document.querySelectorAll('.day').forEach(b => b.classList.toggle('sel', b.dataset.f === fecha));
+    document.querySelectorAll('.day').forEach(b => { const on = b.dataset.f === fecha; b.classList.toggle('sel', on); b.setAttribute('aria-pressed', on); });
     const box = $('#slotsP'); box.innerHTML = '<p class="mensaje-turnos">Cargando…</p>';
     let oc = [];
     try { oc = await ProfesoresAPI.ocupadas(p.id, fecha); }
@@ -62,7 +62,7 @@ function detalle(p) {
   $('#slotsP').addEventListener('click', e => {
     const b = e.target.closest('[data-h]'); if (!b || b.disabled) return;
     sel.hora = +b.dataset.h;
-    document.querySelectorAll('#slotsP .slot').forEach(s => s.classList.toggle('sel', s === b));
+    document.querySelectorAll('#slotsP .slot').forEach(s => { s.classList.toggle('sel', s === b); s.setAttribute('aria-pressed', s === b); });
     $('#btnClase').disabled = false;
   });
   $('#formClase').addEventListener('submit', async e => {
@@ -100,4 +100,5 @@ document.querySelectorAll('[data-cfg]').forEach(el => el.textContent = CONFIG[el
 $('#year').textContent = new Date().getFullYear();
 $('#burger').onclick = () => $('#navbar').classList.toggle('open');
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') e.target.classList.remove('open'); });
+addEventListener('keydown', e => { if (e.key === 'Escape') $('#modal').classList.remove('open'); });
 lucide.createIcons(); iniciar();
